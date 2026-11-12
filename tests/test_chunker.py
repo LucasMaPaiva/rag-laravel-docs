@@ -50,3 +50,26 @@ def test_divide_secao_longa_sem_cortar_codigo():
     assert len(partes) > 1
     assert all(p.texto.count("```") % 2 == 0 for p in partes)
     assert [p.indice for p in partes] == list(range(len(partes)))
+
+
+def test_tabela_e_codigo_enormes_sao_cortados_no_teto_mantendo_cercas():
+    tabela = "\n".join(f"| Contrato{i} | Facade{i} |" for i in range(400))
+    codigo = "```php\n" + "\n".join(f"$x{i} = {i};" for i in range(800)) + "\n```"
+    md = "# P\n\n<a name=\"t\"></a>\n## T\n\n" + tabela + "\n\n" + codigo + "\n"
+    partes = quebrar_pagina(md, "p", limite=1000)
+    assert max(len(p.texto) for p in partes) <= 3 * 1000 + 100
+    assert all(p.texto.count("```") % 2 == 0 for p in partes)
+    assert any(p.texto.startswith("```php") for p in partes[1:])
+
+
+def test_imagem_base64_vira_marcador():
+    md = "# P\n\n<a name=\"a\"></a>\n## A\n\nTela:\n\n![Tela de autorização](data:image/png;base64," + "A" * 5000 + ")\n"
+    (trecho,) = quebrar_pagina(md, "p")
+    assert "[imagem: Tela de autorização]" in trecho.texto
+    assert "base64" not in trecho.texto
+
+
+def test_ids_sao_unicos_mesmo_sem_ancora():
+    md = "# P\n\n## Sem ancora 1\n\ntexto a\n\n## Sem ancora 2\n\ntexto b\n"
+    partes = quebrar_pagina(md, "p")
+    assert len({p.id for p in partes}) == len(partes) == 2

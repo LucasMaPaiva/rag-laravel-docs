@@ -1,0 +1,29 @@
+# Infra local do RAG: PostgreSQL com pgvector (e pg_trgm) e Ollama para os embeddings.
+# Portas fora das usadas pelos outros projetos da máquina.
+services:
+  db:
+    image: pgvector/pgvector:pg17
+    container_name: rag-laravel-db
+    environment:
+      POSTGRES_DB: rag
+      POSTGRES_USER: rag
+      POSTGRES_PASSWORD: rag
+    ports:
+      - "127.0.0.1:5470:5432"
+    volumes:
+      - rag-db:/var/lib/postgresql/data
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: rag-laravel-ollama
+    ports:
+      - "127.0.0.1:11440:11434"
+    volumes:
+      - rag-ollama:/root/.ollama
+    environment:
+      OLLAMA_KEEP_ALIVE: 2m
+      OLLAMA_MAX_LOADED_MODELS: 1
+
+volumes:
+  rag-db:
+  rag-ollama:

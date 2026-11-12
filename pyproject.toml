@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "RAG local sobre a documentação do Laravel: busca vetorial e híbrida no PostgreSQL (pgvector + pg_trgm), com avaliação."
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = ["psycopg[binary]>=3.2", "requests>=2.32"]
 
 [dependency-groups]
 dev = ["pytest>=8", "ruff>=0.8"]

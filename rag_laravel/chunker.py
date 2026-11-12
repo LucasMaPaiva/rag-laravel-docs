@@ -17,6 +17,8 @@ BASE_URL = "https://laravel.com/docs/{versao}/{pagina}"
 ANCORA = re.compile(r'^<a name="([^"]+)"></a>\s*$')
 TITULO = re.compile(r"^(#{1,4})\s+(.+?)\s*$")
 CERCA = re.compile(r"^\s*(```|~~~)")
+# Imagens embutidas em base64 viram um marcador curto: não ajudam a busca e estouram o tamanho.
+IMAGEM_EMBUTIDA = re.compile(r"!\[([^\]]*)\]\(data:[^)]*\)")
 
 
 @dataclass
@@ -41,7 +43,8 @@ class Trecho:
 
     @property
     def id(self) -> str:
-        return f"{self.pagina}#{self.ancora or 'inicio'}:{self.indice}"
+        """Único por página: a posição entra no id (há seções sem âncora e âncoras repetidas)."""
+        return f"{self.pagina}#{self.ancora or 'sem-ancora'}:{self.extras.get('posicao', 0)}:{self.indice}"
 
     def texto_para_embedding(self) -> str:
         """O caminho de títulos entra no texto: ajuda a busca a saber de que trecho se trata."""
@@ -49,27 +52,50 @@ class Trecho:
 
 
 def _dividir_paragrafos(texto: str, limite: int) -> list[str]:
-    """Divide um texto longo em partes de até ``limite`` caracteres, sem cortar código."""
+    """Divide um texto longo em partes de até ``limite`` caracteres.
+
+    Prefere cortar no fim de um parágrafo fora de código. Se uma parte passar de
+    ``3 * limite`` (tabelas, listas e blocos de código enormes, sem linha em branco),
+    corta na quebra de linha; dentro de código, fecha a cerca e a reabre na parte seguinte,
+    para cada parte continuar sendo markdown válido.
+    """
     if len(texto) <= limite:
         return [texto]
+    teto = 3 * limite
     blocos: list[str] = []
     atual: list[str] = []
-    dentro_de_codigo = False
+    tamanho = 0
+    cerca_aberta: str | None = None  # linha que abriu o bloco de código atual
+
+    def emitir() -> None:
+        nonlocal atual, tamanho
+        parte = "\n".join(atual).strip()
+        if parte:
+            blocos.append(parte)
+        atual, tamanho = [], 0
+
     for linha in texto.split("\n"):
         if CERCA.match(linha):
-            dentro_de_codigo = not dentro_de_codigo
+            cerca_aberta = None if cerca_aberta else linha.strip()
         atual.append(linha)
-        fim_de_paragrafo = linha.strip() == "" and not dentro_de_codigo
-        if fim_de_paragrafo and len("\n".join(atual)) >= limite:
-            blocos.append("\n".join(atual).strip())
-            atual = []
-    if atual and "\n".join(atual).strip():
-        blocos.append("\n".join(atual).strip())
+        tamanho += len(linha) + 1
+        if linha.strip() == "" and cerca_aberta is None and tamanho >= limite:
+            emitir()
+        elif tamanho >= teto:
+            if cerca_aberta:
+                marcador = cerca_aberta
+                atual.append(marcador[:3])  # fecha a cerca (``` ou ~~~)
+                emitir()
+                atual, tamanho = [marcador], len(marcador) + 1  # reabre com a mesma linguagem
+            else:
+                emitir()
+    emitir()
     return blocos
 
 
 def quebrar_pagina(conteudo: str, pagina: str, versao: str = "13.x", limite: int = 2000) -> list[Trecho]:
     """Transforma o markdown de uma página em trechos, um por seção (com subdivisão se longa)."""
+    conteudo = IMAGEM_EMBUTIDA.sub(lambda m: f"[imagem: {m.group(1)}]", conteudo)
     linhas = conteudo.splitlines()
     titulo_pagina = pagina
     pilha: list[tuple[int, str]] = []  # (nível, título) das seções abertas
@@ -117,6 +143,8 @@ def quebrar_pagina(conteudo: str, pagina: str, versao: str = "13.x", limite: int
                 continue
         corpo.append(linha)
     fechar()
+    for posicao, trecho in enumerate(trechos):
+        trecho.extras["posicao"] = posicao
     return trechos
 
 
