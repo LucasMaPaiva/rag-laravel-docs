@@ -61,20 +61,45 @@
   }
   .erro { color: var(--destaque); }
   .vazio { color: var(--suave); margin-top: 24px; text-align: center; }
+  .modos { display: inline-flex; border: 1px solid var(--borda); border-radius: 999px; padding: 3px; background: var(--cartao); margin-bottom: 4px; }
+  .modos button { border: 0; border-radius: 999px; padding: 6px 16px; color: var(--suave); background: transparent; }
+  .modos button.ativo { background: var(--texto); color: var(--fundo); }
+  body.modo-resposta .so-busca { display: none; }
+  .resposta { max-width: 760px; margin: 24px auto 0; display: grid; gap: 12px; }
+  .cartao { background: var(--cartao); border: 1px solid var(--borda); border-radius: 12px; padding: 16px 18px; }
+  .texto p { margin: 0 0 10px; } .texto p:last-child { margin-bottom: 0; }
+  .texto ul, .texto ol { margin: 0 0 10px; padding-left: 20px; display: block; }
+  .texto li { background: none; border: 0; padding: 2px 0; }
+  .texto code { background: var(--codigo); padding: 1px 5px; border-radius: 5px; font-size: 13px; }
+  .texto pre code { padding: 0; background: none; }
+  .texto pre { margin: 0 0 10px; }
+  .cit { color: var(--destaque); text-decoration: none; font-weight: 600; font-size: 13px; }
+  .cit-ruim { color: var(--fundo); background: var(--destaque); border-radius: 4px; padding: 0 4px; font-size: 13px; }
+  .cursor::after { content: "▍"; color: var(--suave); animation: pisca 1s steps(1) infinite; }
+  @keyframes pisca { 50% { opacity: 0; } }
+  .selo { font-size: 13px; padding: 8px 12px; border-radius: 10px; border: 1px solid var(--borda); }
+  .selo.ok { color: var(--ok); } .selo.alerta { color: var(--destaque); }
+  .fontes h3 { font-size: 13px; color: var(--suave); font-weight: 600; margin: 0 0 8px; text-transform: uppercase; letter-spacing: .04em; }
+  .fontes li.citada { border-color: var(--destaque); }
+  .fontes .tag { font-size: 11px; color: var(--destaque); margin-left: auto; white-space: nowrap; }
 </style>
 </head>
-<body class="inicial">
+<body class="inicial modo-resposta">
 <main>
   <div class="cabeca">
   <h1>RAG local sobre a documentação do Laravel</h1>
-  <p class="sub">Pergunte em português; a busca roda sobre a documentação em inglês (pgvector, pg_trgm e Ollama).</p>
+  <p class="sub">Pergunte em português; a resposta vem da documentação em inglês, com a seção citada (pgvector, pg_trgm e Ollama).</p>
 
   <form id="form">
+    <div><div class="modos" role="tablist">
+      <button type="button" data-modo="resposta" class="ativo">Resposta</button>
+      <button type="button" data-modo="busca">Só busca</button>
+    </div></div>
     <div class="linha">
       <input type="search" id="q" placeholder="Ex.: como excluir um registro sem apagá-lo do banco?" autofocus>
-      <button class="principal" type="submit">Buscar</button>
+      <button class="principal" type="submit" id="enviar">Perguntar</button>
     </div>
-    <div class="linha">
+    <div class="linha so-busca">
       <select id="estrategia"></select>
       <select id="k">
         <option value="3">top 3</option><option value="5" selected>top 5</option><option value="10">top 10</option>
@@ -99,6 +124,8 @@ const EXEMPLOS = [
 const COMPARAR = ["vetorial-nomic", "vetorial-bge", "trigramas", "hibrida-bge-t0.2"];
 const $ = (id) => document.getElementById(id);
 let rotulos = {};
+let modo = "resposta";
+let pedidoAtual = null;
 
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
@@ -109,6 +136,16 @@ async function carregarEstrategias() {
     $("estrategia").insertAdjacentHTML("beforeend", `<option value="${esc(e.id)}">${esc(e.rotulo)}</option>`);
   }
 }
+
+function trocarModo(novo) {
+  modo = novo;
+  document.body.classList.toggle("modo-resposta", modo === "resposta");
+  for (const b of document.querySelectorAll(".modos button")) b.classList.toggle("ativo", b.dataset.modo === modo);
+  $("enviar").textContent = modo === "resposta" ? "Perguntar" : "Buscar";
+  if ($("q").value.trim()) enviar();
+}
+
+/* ---------- modo busca ---------- */
 
 function colunaHTML(dados) {
   if (dados.erro) return `<section class="coluna"><h2>${esc(rotulos[dados.estrategia] || "")}</h2><p class="erro">${esc(dados.erro)}</p></section>`;
@@ -132,31 +169,136 @@ async function buscarUma(q, estrategia, k) {
   }
 }
 
-async function buscar() {
-  const q = $("q").value.trim();
-  if (!q) return;
-  const k = $("k").value;
-  document.body.classList.remove("inicial");
-  sincronizarURL();
+async function buscar(q) {
   const estrategias = $("comparar").checked ? COMPARAR : [$("estrategia").value];
   $("saida").innerHTML = `<p class="vazio">Buscando…</p>`;
-  const resultados = await Promise.all(estrategias.map((e) => buscarUma(q, e, k)));
+  const resultados = await Promise.all(estrategias.map((e) => buscarUma(q, e, $("k").value)));
   $("saida").innerHTML = `<div class="colunas${resultados.length === 1 ? " uma" : ""}">${resultados.map(colunaHTML).join("")}</div>`;
 }
 
-$("form").addEventListener("submit", (ev) => { ev.preventDefault(); buscar(); });
-$("comparar").addEventListener("change", () => { $("estrategia").disabled = $("comparar").checked; if ($("q").value.trim()) buscar(); });
+/* ---------- modo resposta ---------- */
+
+// Markdown mínimo: blocos de código, `código`, **negrito**, listas e citações [n] viram links.
+function inline(texto, total) {
+  return esc(texto)
+    .replace(/`([^`]+)`/g, "<code>$1</code>")
+    .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+    .replace(/\[(\d+(?:\s*,\s*\d+)*)\]/g, (_, grupo) => grupo.split(",").map((n) => {
+      n = Number(n);
+      return n >= 1 && n <= total
+        ? `<a class="cit" href="#fonte-${n}">[${n}]</a>`
+        : `<span class="cit-ruim" title="essa fonte não existe">[${n}]</span>`;
+    }).join(""));
+}
+
+function markdown(texto, total) {
+  const partes = texto.split("```");
+  return partes.map((parte, i) => {
+    if (i % 2 === 1) return `<pre><code>${esc(parte.replace(/^[a-z]*\n/, ""))}</code></pre>`;
+    return parte.split(/\n{2,}/).filter((b) => b.trim()).map((bloco) => {
+      const linhas = bloco.trim().split("\n");
+      if (linhas.every((l) => /^\s*([-*]|\d+\.)\s/.test(l))) {
+        const tag = /^\s*\d+\./.test(linhas[0]) ? "ol" : "ul";
+        return `<${tag}>${linhas.map((l) => `<li>${inline(l.replace(/^\s*([-*]|\d+\.)\s/, ""), total)}</li>`).join("")}</${tag}>`;
+      }
+      return `<p>${linhas.map((l) => inline(l, total)).join("<br>")}</p>`;
+    }).join("");
+  }).join("");
+}
+
+function fontesHTML(fontes, citadas) {
+  const itens = fontes.map((f) => `
+    <li id="fonte-${f.numero}" class="${citadas.includes(f.numero) ? "citada" : ""}">
+      <div class="topo"><span class="pos">[${f.numero}]</span><span class="caminho">${esc(f.caminho)}</span>
+        ${citadas.includes(f.numero) ? '<span class="tag">citada</span>' : ""}</div>
+      <div class="meta"><a href="${esc(f.url)}" target="_blank" rel="noopener">${esc(f.secao)}</a></div>
+      <details><summary>ver trecho</summary><pre>${esc(f.texto)}</pre></details>
+    </li>`).join("");
+  return `<div class="fontes"><h3>Fontes usadas</h3><ol>${itens}</ol></div>`;
+}
+
+function seloHTML(v, ms) {
+  const tempo = `${(ms / 1000).toFixed(1)} s`;
+  if (v.recusou) return `<div class="selo alerta">O modelo não encontrou a resposta nas fontes. (${tempo})</div>`;
+  const avisos = [];
+  if (v.invalidas.length) avisos.push(`cita fonte que não existe: ${v.invalidas.map((n) => `[${n}]`).join(", ")}`);
+  if (v.sem_citacao) avisos.push("a resposta não cita nenhuma fonte");
+  if (avisos.length) return `<div class="selo alerta">Atenção: ${avisos.join("; ")}. (${tempo})</div>`;
+  const n = v.citadas.length;
+  return `<div class="selo ok">✓ ${n} ${n === 1 ? "fonte citada" : "fontes citadas"}, todas conferidas entre os trechos encontrados. (${tempo})</div>`;
+}
+
+async function perguntar(q) {
+  const controle = new AbortController();
+  pedidoAtual = controle;
+  const inicio = performance.now();
+  $("saida").innerHTML = `<div class="resposta"><div class="cartao texto cursor" id="texto"><span class="vazio">Buscando trechos…</span></div><div id="selo"></div><div id="fontes"></div></div>`;
+  let fontes = [], texto = "";
+  const desenhar = (final) => {
+    $("texto").innerHTML = texto ? markdown(texto, fontes.length) : `<span class="vazio">Gerando a resposta…</span>`;
+    $("texto").classList.toggle("cursor", !final);
+  };
+  try {
+    const resp = await fetch(`/api/perguntar?${new URLSearchParams({ q })}`, { signal: controle.signal });
+    if (!resp.ok) throw new Error((await resp.json()).erro || `erro ${resp.status}`);
+    const leitor = resp.body.getReader();
+    const decodificador = new TextDecoder();
+    let sobra = "";
+    while (true) {
+      const { value, done } = await leitor.read();
+      if (done) break;
+      sobra += decodificador.decode(value, { stream: true });
+      const linhas = sobra.split("\n");
+      sobra = linhas.pop();
+      for (const linha of linhas) {
+        if (!linha.trim()) continue;
+        const ev = JSON.parse(linha);
+        if (ev.tipo === "fontes") { fontes = ev.fontes; $("fontes").innerHTML = fontesHTML(fontes, []); desenhar(false); }
+        else if (ev.tipo === "texto") { texto += ev.texto; desenhar(false); }
+        else if (ev.tipo === "fim") {
+          desenhar(true);
+          $("selo").innerHTML = seloHTML(ev.verificacao, performance.now() - inicio);
+          $("fontes").innerHTML = fontesHTML(fontes, ev.verificacao.citadas);
+        } else if (ev.tipo === "erro") throw new Error(ev.erro);
+      }
+    }
+  } catch (e) {
+    if (e.name === "AbortError") return;
+    $("texto").classList.remove("cursor");
+    $("selo").innerHTML = `<div class="selo alerta">Erro: ${esc(e.message)}</div>`;
+  }
+}
+
+/* ---------- geral ---------- */
+
+function enviar() {
+  const q = $("q").value.trim();
+  if (!q) return;
+  if (pedidoAtual) pedidoAtual.abort();
+  document.body.classList.remove("inicial");
+  sincronizarURL();
+  return modo === "resposta" ? perguntar(q) : buscar(q);
+}
+
+// O estado fica na URL (?q=...&modo=busca&comparar=1...): dá para compartilhar ou recarregar.
+function sincronizarURL() {
+  const p = new URLSearchParams({ q: $("q").value.trim() });
+  if (modo === "busca") {
+    p.set("modo", "busca");
+    p.set("k", $("k").value);
+    if ($("comparar").checked) p.set("comparar", "1"); else p.set("estrategia", $("estrategia").value);
+  }
+  history.replaceState(null, "", `?${p}`);
+}
+
+$("form").addEventListener("submit", (ev) => { ev.preventDefault(); enviar(); });
+$("comparar").addEventListener("change", () => { $("estrategia").disabled = $("comparar").checked; if ($("q").value.trim()) enviar(); });
+for (const b of document.querySelectorAll(".modos button")) b.onclick = () => trocarModo(b.dataset.modo);
 for (const ex of EXEMPLOS) {
   const b = document.createElement("button");
   b.type = "button"; b.textContent = ex;
-  b.onclick = () => { $("q").value = ex; buscar(); };
+  b.onclick = () => { $("q").value = ex; enviar(); };
   $("exemplos").appendChild(b);
-}
-// A busca fica na URL (?q=...&estrategia=...&k=...&comparar=1): dá para compartilhar ou recarregar.
-function sincronizarURL() {
-  const p = new URLSearchParams({ q: $("q").value.trim(), k: $("k").value });
-  if ($("comparar").checked) p.set("comparar", "1"); else p.set("estrategia", $("estrategia").value);
-  history.replaceState(null, "", `?${p}`);
 }
 
 async function iniciar() {
@@ -165,7 +307,10 @@ async function iniciar() {
   if (p.get("estrategia") && rotulos[p.get("estrategia")]) $("estrategia").value = p.get("estrategia");
   if (p.get("k")) $("k").value = p.get("k");
   if (p.get("comparar") === "1") { $("comparar").checked = true; $("estrategia").disabled = true; }
-  if (p.get("q")) { $("q").value = p.get("q"); buscar(); }
+  // Links antigos (?comparar=1 ou ?estrategia=...) continuam abrindo no modo busca.
+  const novoModo = p.get("modo") || (p.get("comparar") || p.get("estrategia") ? "busca" : "resposta");
+  if (p.get("q")) $("q").value = p.get("q");
+  trocarModo(novoModo);
 }
 iniciar();
 </script>

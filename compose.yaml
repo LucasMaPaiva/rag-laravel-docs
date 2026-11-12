@@ -21,8 +21,13 @@ services:
     volumes:
       - rag-ollama:/root/.ollama
     environment:
-      OLLAMA_KEEP_ALIVE: 2m
-      OLLAMA_MAX_LOADED_MODELS: 1
+      OLLAMA_KEEP_ALIVE: 10m
+      # bge-m3 (embedding da pergunta) e qwen2.5:7b (resposta) ficam carregados juntos.
+      OLLAMA_MAX_LOADED_MODELS: 2
+    # GPU NVIDIA via CDI (nvidia-container-toolkit + `nvidia-ctk cdi generate`).
+    # Sem GPU, apague este bloco: o Ollama roda na CPU, só que mais devagar.
+    devices:
+      - nvidia.com/gpu=all
 
 volumes:
   rag-db:

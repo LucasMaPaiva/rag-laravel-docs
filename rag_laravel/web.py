@@ -6,6 +6,7 @@
 Rotas:
     GET /                                         página de busca
     GET /api/buscar?q=...&estrategia=...&k=5      resultados em JSON
+    GET /api/perguntar?q=...                      resposta com citação, em NDJSON (um evento por linha)
 """
 
 from __future__ import annotations
@@ -17,7 +18,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
-from rag_laravel import banco, busca
+from rag_laravel import banco, busca, geracao
 
 PAGINA = Path(__file__).resolve().parent / "web" / "index.html"
 TAMANHO_TRECHO = 700
@@ -96,8 +97,33 @@ class Manipulador(BaseHTTPRequestHandler):
                 self._json(503, {"erro": f"{type(erro).__name__}: {erro}"})
                 return
             self._json(200, dados)
+        elif url.path == "/api/perguntar":
+            self._perguntar(parse_qs(url.query).get("q", [""])[0].strip())
         else:
             self._json(404, {"erro": "rota não encontrada"})
+
+    def _perguntar(self, pergunta: str) -> None:
+        """Manda os eventos da geração conforme chegam: fontes, pedaços de texto e a verificação."""
+        if not pergunta:
+            self._json(400, {"erro": "pergunta vazia"})
+            return
+        self.send_response(200)
+        self.send_header("Content-Type", "application/x-ndjson; charset=utf-8")
+        self.send_header("Cache-Control", "no-cache")
+        self.end_headers()
+
+        def enviar(evento: dict) -> None:
+            self.wfile.write((json.dumps(evento, ensure_ascii=False) + "\n").encode())
+            self.wfile.flush()
+
+        try:
+            with banco.conectar() as conn:
+                for evento in geracao.responder(conn, pergunta):
+                    enviar(evento)
+        except (BrokenPipeError, ConnectionResetError):
+            pass  # quem pediu fechou a página
+        except Exception as erro:  # banco ou Ollama fora do ar, modelo não baixado
+            enviar({"tipo": "erro", "erro": f"{type(erro).__name__}: {erro}"})
 
     def _json(self, status: int, dados) -> None:
         self._enviar(status, json.dumps(dados, ensure_ascii=False).encode(), "application/json; charset=utf-8")

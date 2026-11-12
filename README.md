@@ -14,7 +14,7 @@ O foco do projeto é medir: cada etapa tem avaliação com perguntas de resposta
 | 2. Embeddings | Gera vetores dos trechos com modelos do Ollama e grava no pgvector | ✅ feito (nomic-embed-text e bge-m3) |
 | 3. Busca | Vetorial, por trigramas (pg_trgm) e híbrida (as duas combinadas) | ✅ feito |
 | 4. Avaliação da busca | ~30 perguntas em português com a seção esperada; mede se ela aparece entre os 5 primeiros (recall@5) e a posição (MRR) | ✅ primeira rodada |
-| 5. Geração | Responde só com os trechos encontrados e cita a seção; o código confere se a citação existe | depois |
+| 5. Geração | Responde só com os trechos encontrados e cita a seção; o código confere se a citação existe | ✅ feito (qwen2.5:7b) |
 
 Perguntas que a avaliação quer responder:
 
@@ -81,6 +81,39 @@ refeita com o mesmo gabarito:
 
 Com o gabarito antigo, o nomic tinha 40% (vetorial) e 50% (híbrida); com o novo, 43% e 57%.
 
+## Resultados da geração (etapa 5)
+
+A resposta usa os 5 trechos da busca híbrida (bge-m3, trigramas com peso 0,2), numerados de [1] a
+[5]. O **qwen2.5:7b** (Ollama, na GPU) responde em português e cita o número da fonte; o código
+confere cada citação (`rag_laravel/geracao.py`): número que não existe entre as fontes é marcado
+como inválido, e resposta sem citação é sinalizada. Colchetes dentro de código (`$itens[0]`) não
+contam.
+
+`evals/avaliar_geracao.py`, com as mesmas 30 perguntas:
+
+| Métrica | Regra só no início | Regra repetida no fim |
+|---|---|---|
+| Respostas com pelo menos uma citação | 77% | **100%** |
+| Citações para fonte inexistente | 0% | 0% |
+| A seção certa estava entre as 5 fontes (busca) | 90% | 90% |
+| Cita a seção certa, quando ela estava nas fontes | 74% | **89%** |
+| Tempo mediano por resposta (RTX 4050) | 24 s | 15 s |
+
+- **Na primeira rodada, 7 de 30 respostas vieram sem nenhuma citação**, com o conteúdo certo. A
+  regra de citar estava só nas instruções de sistema, antes de 5 trechos longos. Repetir a regra
+  no fim da mensagem, logo depois da pergunta e com um exemplo (`Use o método with() [2].`),
+  resolveu: 100% com citação, e as respostas ficaram mais curtas (15 s contra 24 s).
+- **O modelo nunca inventou número de fonte**, mas às vezes cita a fonte vizinha: na pergunta de
+  soft delete, ele explica certo e cita [4] (excluir pela chave primária) em vez de [5]
+  (soft deleting). Conferir se o número existe não pega isso; o próximo passo é conferir se a
+  frase tem apoio no trecho citado.
+- Um falso positivo corrigido depois da segunda rodada: em uma resposta certa e citada, o modelo
+  colou "Não encontrei isso na documentação." no final, e a avaliação contou como recusa. Agora
+  só conta como recusa a resposta que começa pela frase.
+
+Na CPU, cada resposta leva cerca de 2 minutos; o `compose.yaml` libera a GPU NVIDIA por CDI
+(`nvidia-container-toolkit` e `nvidia-ctk cdi generate`). Sem GPU, apague o bloco `devices`.
+
 ## Testar a busca
 
 Com o banco e o Ollama no ar (`docker compose up -d`):
@@ -89,7 +122,11 @@ Com o banco e o Ollama no ar (`docker compose up -d`):
 uv run python -m rag_laravel.web
 ```
 
-Abre uma interface em http://127.0.0.1:8470: escreva a pergunta, escolha a estratégia ou marque
+Abre uma interface em http://127.0.0.1:8470. No modo **Resposta** (padrão), o texto aparece
+enquanto é gerado, as citações viram links para a fonte e um selo mostra se a conferência passou.
+Pelo terminal: `uv run python -m rag_laravel.geracao "sua pergunta"`.
+
+No modo **Só busca**, escreva a pergunta, escolha a estratégia ou marque
 "comparar estratégias lado a lado" para ver nomic, bge-m3, trigramas e híbrida na mesma tela.
 Usa só a biblioteca padrão do Python (`http.server`), sem dependência nova.
 A busca fica na URL (`?q=...&comparar=1`), então dá para compartilhar ou recarregar.
