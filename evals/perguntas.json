@@ -161,7 +161,8 @@
    "tipo": "metodo",
    "pergunta": "Como usar Cache::lock para evitar que dois processos executem a mesma coisa ao mesmo tempo?",
    "esperado": [
-    "cache#atomic-locks"
+    "cache#atomic-locks",
+    "cache#managing-locks-across-processes"
    ]
   },
   {
@@ -211,7 +212,8 @@
    "pergunta": "Como gerar tokens de API para um aplicativo mobile autenticar no backend?",
    "esperado": [
     "sanctum#issuing-api-tokens",
-    "sanctum#api-token-authentication"
+    "sanctum#api-token-authentication",
+    "sanctum#issuing-mobile-api-tokens"
    ]
   },
   {
@@ -228,7 +230,8 @@
    "tipo": "metodo",
    "pergunta": "Como fazer várias requisições HTTP em paralelo com Http::pool?",
    "esperado": [
-    "http-client#concurrent-requests"
+    "http-client#concurrent-requests",
+    "http-client#request-pooling"
    ]
   },
   {
