@@ -52,20 +52,32 @@ def trigramas(conn, pergunta: str, k: int = 10) -> list[Resultado]:
     return [Resultado(*linha) for linha in linhas]
 
 
-def fundir_rrf(listas: list[list[Resultado]], k: int = 10, constante: int = 60) -> list[Resultado]:
-    """Reciprocal Rank Fusion: soma 1 / (constante + posição) de cada lista."""
+def fundir_rrf(
+    listas: list[list[Resultado]], k: int = 10, constante: int = 60, pesos: list[float] | None = None
+) -> list[Resultado]:
+    """Reciprocal Rank Fusion: soma peso / (constante + posição) de cada lista.
+
+    Sem ``pesos``, todas as listas valem o mesmo (RRF clássico).
+    """
+    pesos = pesos or [1.0] * len(listas)
+    if len(pesos) != len(listas):
+        raise ValueError("informe um peso para cada lista")
     pontos: dict[str, float] = {}
     por_id: dict[str, Resultado] = {}
-    for lista in listas:
+    for lista, peso in zip(listas, pesos, strict=True):
         for posicao, r in enumerate(lista, start=1):
-            pontos[r.id] = pontos.get(r.id, 0.0) + 1.0 / (constante + posicao)
+            pontos[r.id] = pontos.get(r.id, 0.0) + peso / (constante + posicao)
             por_id.setdefault(r.id, r)
     ordem = sorted(pontos, key=pontos.get, reverse=True)[:k]
     return [Resultado(**{**por_id[i].__dict__, "pontuacao": pontos[i]}) for i in ordem]
 
 
-def hibrida(conn, pergunta: str, modelo: str = "bge", k: int = 10, profundidade: int = 50) -> list[Resultado]:
+def hibrida(
+    conn, pergunta: str, modelo: str = "bge", k: int = 10, profundidade: int = 50, peso_trigramas: float = 1.0
+) -> list[Resultado]:
+    """Busca vetorial e por trigramas fundidas por RRF; ``peso_trigramas`` < 1 dá menos voz aos trigramas."""
     return fundir_rrf(
         [vetorial(conn, pergunta, modelo, profundidade), trigramas(conn, pergunta, profundidade)],
         k=k,
+        pesos=[1.0, peso_trigramas],
     )

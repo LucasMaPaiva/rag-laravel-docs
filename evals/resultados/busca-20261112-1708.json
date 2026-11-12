@@ -1,0 +1,2882 @@
+[
+ {
+  "estrategia": "vetorial-bge",
+  "geral": {
+   "n": 30,
+   "recall": 0.8666666666666667,
+   "mrr": 0.6916666666666667
+  },
+  "conceito": {
+   "n": 19,
+   "recall": 0.8421052631578947,
+   "mrr": 0.6271929824561403
+  },
+  "metodo": {
+   "n": 11,
+   "recall": 0.9090909090909091,
+   "mrr": 0.803030303030303
+  },
+  "latencia_mediana_s": 0.0875,
+  "perguntas": [
+   {
+    "id": 1,
+    "tipo": "conceito",
+    "pergunta": "Como paginar resultados sem fazer a consulta de contagem do total de registros?",
+    "esperado": [
+     "pagination#simple-pagination"
+    ],
+    "posicao": 1,
+    "top3": [
+     "pagination#simple-pagination",
+     "pagination#paginating-query-builder-results",
+     "pagination#paginator-instance-methods"
+    ],
+    "segundos": 0.098
+   },
+   {
+    "id": 2,
+    "tipo": "metodo",
+    "pergunta": "Para que serve o método simplePaginate?",
+    "esperado": [
+     "pagination#simple-pagination"
+    ],
+    "posicao": 1,
+    "top3": [
+     "pagination#simple-pagination",
+     "pagination#paginating-query-builder-results",
+     "scout#pagination"
+    ],
+    "segundos": 0.083
+   },
+   {
+    "id": 3,
+    "tipo": "conceito",
+    "pergunta": "Qual paginação é mais eficiente para tabelas muito grandes e rolagem infinita?",
+    "esperado": [
+     "pagination#cursor-pagination"
+    ],
+    "posicao": 1,
+    "top3": [
+     "pagination#cursor-pagination",
+     "pagination#simple-pagination",
+     "pagination#cursor-vs-offset-pagination"
+    ],
+    "segundos": 0.086
+   },
+   {
+    "id": 4,
+    "tipo": "conceito",
+    "pergunta": "Como evitar o problema de N+1 consultas ao carregar relacionamentos?",
+    "esperado": [
+     "eloquent-relationships#eager-loading"
+    ],
+    "posicao": 1,
+    "top3": [
+     "eloquent-relationships#eager-loading",
+     "eloquent-resources#conditional-relationships",
+     "eloquent-relationships#polymorphic-automatically-hydrating-parent-models-on-children"
+    ],
+    "segundos": 0.094
+   },
+   {
+    "id": 5,
+    "tipo": "metodo",
+    "pergunta": "Como usar Model::preventLazyLoading para detectar carregamento preguiçoso?",
+    "esperado": [
+     "eloquent-relationships#preventing-lazy-loading"
+    ],
+    "posicao": 1,
+    "top3": [
+     "eloquent-relationships#preventing-lazy-loading",
+     "eloquent#configuring-eloquent-strictness",
+     "collections#lazy-collection-introduction"
+    ],
+    "segundos": 0.095
+   },
+   {
+    "id": 6,
+    "tipo": "conceito",
+    "pergunta": "Como carregar um relacionamento depois que o model já foi buscado do banco?",
+    "esperado": [
+     "eloquent-relationships#lazy-eager-loading"
+    ],
+    "posicao": 2,
+    "top3": [
+     "eloquent-relationships#deferred-count-loading",
+     "eloquent-relationships#lazy-eager-loading",
+     "eloquent-relationships#morph-to-deferred-count-loading"
+    ],
+    "segundos": 0.104
+   },
+   {
+    "id": 7,
+    "tipo": "conceito",
+    "pergunta": "O que fazer quando um job da fila falha várias vezes?",
+    "esperado": [
+     "queues#dealing-with-failed-jobs",
+     "queues#max-attempts"
+    ],
+    "posicao": 1,
+    "top3": [
+     "queues#dealing-with-failed-jobs",
+     "queues#fail-jobs-on-exceptions",
+     "queues#manually-failing-a-job"
+    ],
+    "segundos": 0.087
+   },
+   {
+    "id": 8,
+    "tipo": "metodo",
+    "pergunta": "Como reprocessar jobs que falharam com o comando queue:retry?",
+    "esperado": [
+     "queues#retrying-failed-jobs"
+    ],
+    "posicao": 2,
+    "top3": [
+     "queues#retrying-failed-batch-jobs",
+     "queues#retrying-failed-jobs",
+     "queues#job-expiration"
+    ],
+    "segundos": 0.097
+   },
+   {
+    "id": 9,
+    "tipo": "conceito",
+    "pergunta": "Como limitar quantas vezes um job pode ser tentado antes de ser considerado falho?",
+    "esperado": [
+     "queues#max-attempts"
+    ],
+    "posicao": 3,
+    "top3": [
+     "queues#time-based-attempts",
+     "horizon#max-job-attempts",
+     "queues#max-attempts"
+    ],
+    "segundos": 0.089
+   },
+   {
+    "id": 10,
+    "tipo": "metodo",
+    "pergunta": "Como usar o middleware WithoutOverlapping para um job não rodar duas vezes ao mesmo tempo?",
+    "esperado": [
+     "queues#preventing-job-overlaps"
+    ],
+    "posicao": 1,
+    "top3": [
+     "queues#preventing-job-overlaps",
+     "queues#preventing-job-overlaps",
+     "queues#sharing-lock-keys"
+    ],
+    "segundos": 0.11
+   },
+   {
+    "id": 11,
+    "tipo": "conceito",
+    "pergunta": "Como garantir que uma tarefa agendada não execute de novo enquanto a anterior ainda está rodando?",
+    "esperado": [
+     "scheduling#preventing-task-overlaps"
+    ],
+    "posicao": 1,
+    "top3": [
+     "scheduling#preventing-task-overlaps",
+     "queues#preventing-job-overlaps",
+     "scheduling#pausing-scheduled-tasks"
+    ],
+    "segundos": 0.089
+   },
+   {
+    "id": 12,
+    "tipo": "metodo",
+    "pergunta": "Para que serve o onOneServer no agendador de tarefas?",
+    "esperado": [
+     "scheduling#running-tasks-on-one-server"
+    ],
+    "posicao": 1,
+    "top3": [
+     "scheduling#running-tasks-on-one-server",
+     "scheduling#naming-unique-jobs",
+     "octane#introduction"
+    ],
+    "segundos": 0.081
+   },
+   {
+    "id": 13,
+    "tipo": "conceito",
+    "pergunta": "Como despachar um job somente depois que a transação do banco for confirmada?",
+    "esperado": [
+     "queues#jobs-and-database-transactions"
+    ],
+    "posicao": 1,
+    "top3": [
+     "queues#jobs-and-database-transactions",
+     "queues#specifying-commit-dispatch-behavior-inline",
+     "queues#keeping-jobs-unique-until-processing-begins"
+    ],
+    "segundos": 0.086
+   },
+   {
+    "id": 14,
+    "tipo": "conceito",
+    "pergunta": "Como processar milhares de registros em partes para não estourar a memória?",
+    "esperado": [
+     "eloquent#chunking-results",
+     "queries#chunking-results"
+    ],
+    "posicao": 2,
+    "top3": [
+     "collections#method-with-heartbeat",
+     "queries#chunking-results",
+     "pulse#sampling"
+    ],
+    "segundos": 0.087
+   },
+   {
+    "id": 15,
+    "tipo": "metodo",
+    "pergunta": "Como inserir ou atualizar vários registros de uma vez com upsert?",
+    "esperado": [
+     "eloquent#upserts",
+     "queries#upserts"
+    ],
+    "posicao": 1,
+    "top3": [
+     "queries#upserts",
+     "eloquent#upserts",
+     "queries#update-or-insert"
+    ],
+    "segundos": 0.089
+   },
+   {
+    "id": 16,
+    "tipo": "conceito",
+    "pergunta": "Como excluir um registro sem apagá-lo de verdade do banco?",
+    "esperado": [
+     "eloquent#soft-deleting"
+    ],
+    "posicao": 4,
+    "top3": [
+     "scout#removing-records",
+     "database#running-a-delete-statement",
+     "eloquent#deleting-an-existing-model-by-its-primary-key"
+    ],
+    "segundos": 0.087
+   },
+   {
+    "id": 17,
+    "tipo": "metodo",
+    "pergunta": "Como buscar também os registros excluídos com withTrashed?",
+    "esperado": [
+     "eloquent#including-soft-deleted-models"
+    ],
+    "posicao": 3,
+    "top3": [
+     "folio#soft-deleted-models",
+     "controllers#soft-deleted-models",
+     "eloquent#including-soft-deleted-models"
+    ],
+    "segundos": 0.09
+   },
+   {
+    "id": 18,
+    "tipo": "conceito",
+    "pergunta": "Como executar várias consultas dentro de uma transação e desfazer tudo se der erro?",
+    "esperado": [
+     "database#database-transactions"
+    ],
+    "posicao": 3,
+    "top3": [
+     "eloquent-relationships#transactional-pivot-operations",
+     "database#handling-deadlocks",
+     "database#database-transactions"
+    ],
+    "segundos": 0.092
+   },
+   {
+    "id": 19,
+    "tipo": "conceito",
+    "pergunta": "Como separar conexões de leitura e escrita para usar uma réplica do banco?",
+    "esperado": [
+     "database#read-and-write-connections"
+    ],
+    "posicao": 1,
+    "top3": [
+     "database#read-and-write-connections",
+     "database#using-the-write-connection-for-reads",
+     "strings#method-fluent-str-deduplicate"
+    ],
+    "segundos": 0.092
+   },
+   {
+    "id": 20,
+    "tipo": "metodo",
+    "pergunta": "Como usar Cache::lock para evitar que dois processos executem a mesma coisa ao mesmo tempo?",
+    "esperado": [
+     "cache#atomic-locks",
+     "cache#managing-locks-across-processes"
+    ],
+    "posicao": null,
+    "top3": [
+     "cache#concurrency-limiting",
+     "session#session-blocking",
+     "queues#unique-job-locks"
+    ],
+    "segundos": 0.09
+   },
+   {
+    "id": 21,
+    "tipo": "conceito",
+    "pergunta": "Como guardar um valor no cache por um tempo determinado?",
+    "esperado": [
+     "cache#storing-items-in-the-cache"
+    ],
+    "posicao": 1,
+    "top3": [
+     "cache#storing-items-in-the-cache",
+     "cache#storing-items-forever",
+     "cache#cache-memoization"
+    ],
+    "segundos": 0.082
+   },
+   {
+    "id": 22,
+    "tipo": "conceito",
+    "pergunta": "Como limitar o número de requisições por minuto de um usuário na API?",
+    "esperado": [
+     "routing#defining-rate-limiters",
+     "rate-limiting#introduction"
+    ],
+    "posicao": null,
+    "top3": [
+     "routing#segmenting-rate-limits",
+     "rate-limiting#basic-usage",
+     "http-client#throwing-exceptions"
+    ],
+    "segundos": 0.086
+   },
+   {
+    "id": 23,
+    "tipo": "conceito",
+    "pergunta": "Como o Laravel injeta automaticamente o model a partir do id na rota?",
+    "esperado": [
+     "routing#implicit-binding"
+    ],
+    "posicao": 2,
+    "top3": [
+     "routing#route-model-binding",
+     "routing#implicit-binding",
+     "controllers#restful-scoping-resource-routes"
+    ],
+    "segundos": 0.091
+   },
+   {
+    "id": 24,
+    "tipo": "metodo",
+    "pergunta": "Como validar que um e-mail ainda não existe na tabela usando a regra unique?",
+    "esperado": [
+     "validation#rule-unique"
+    ],
+    "posicao": 1,
+    "top3": [
+     "validation#rule-unique",
+     "validation#rule-unique",
+     "validation#rule-email"
+    ],
+    "segundos": 0.083
+   },
+   {
+    "id": 25,
+    "tipo": "conceito",
+    "pergunta": "Como mover a validação do controller para uma classe separada?",
+    "esperado": [
+     "validation#creating-form-requests"
+    ],
+    "posicao": null,
+    "top3": [
+     "validation#",
+     "controllers#basic-controllers",
+     "validation#quick-creating-the-controller"
+    ],
+    "segundos": 0.078
+   },
+   {
+    "id": 26,
+    "tipo": "conceito",
+    "pergunta": "Como gerar tokens de API para um aplicativo mobile autenticar no backend?",
+    "esperado": [
+     "sanctum#issuing-api-tokens",
+     "sanctum#api-token-authentication",
+     "sanctum#issuing-mobile-api-tokens"
+    ],
+    "posicao": 2,
+    "top3": [
+     "sanctum#mobile-application-authentication",
+     "sanctum#issuing-mobile-api-tokens",
+     "sanctum#issuing-api-tokens"
+    ],
+    "segundos": 0.088
+   },
+   {
+    "id": 27,
+    "tipo": "conceito",
+    "pergunta": "Como definir quem pode editar um post usando regras de autorização?",
+    "esperado": [
+     "authorization#writing-gates",
+     "authorization#generating-policies"
+    ],
+    "posicao": null,
+    "top3": [
+     "authorization#via-blade-templates",
+     "authorization#via-the-user-model",
+     "authorization#policy-methods"
+    ],
+    "segundos": 0.081
+   },
+   {
+    "id": 28,
+    "tipo": "metodo",
+    "pergunta": "Como fazer várias requisições HTTP em paralelo com Http::pool?",
+    "esperado": [
+     "http-client#concurrent-requests",
+     "http-client#request-pooling"
+    ],
+    "posicao": 1,
+    "top3": [
+     "http-client#request-pooling",
+     "http-client#customizing-concurrent-requests",
+     "http-client#request-batching"
+    ],
+    "segundos": 0.086
+   },
+   {
+    "id": 29,
+    "tipo": "metodo",
+    "pergunta": "Como configurar tentativas automáticas em uma requisição HTTP com retry?",
+    "esperado": [
+     "http-client#retries"
+    ],
+    "posicao": 1,
+    "top3": [
+     "http-client#retries",
+     "helpers#method-retry",
+     "redis#retry-and-backoff-configuration"
+    ],
+    "segundos": 0.087
+   },
+   {
+    "id": 30,
+    "tipo": "conceito",
+    "pergunta": "Como gerar um link temporário que expira para baixar um arquivo privado?",
+    "esperado": [
+     "filesystem#temporary-urls"
+    ],
+    "posicao": 1,
+    "top3": [
+     "filesystem#temporary-urls",
+     "filesystem#customizing-temporary-urls",
+     "filesystem#temporary-upload-urls"
+    ],
+    "segundos": 0.084
+   }
+  ]
+ },
+ {
+  "estrategia": "hibrida-bge",
+  "geral": {
+   "n": 30,
+   "recall": 0.7333333333333333,
+   "mrr": 0.55
+  },
+  "conceito": {
+   "n": 19,
+   "recall": 0.5789473684210527,
+   "mrr": 0.3815789473684211
+  },
+  "metodo": {
+   "n": 11,
+   "recall": 1.0,
+   "mrr": 0.8409090909090909
+  },
+  "latencia_mediana_s": 0.686,
+  "perguntas": [
+   {
+    "id": 1,
+    "tipo": "conceito",
+    "pergunta": "Como paginar resultados sem fazer a consulta de contagem do total de registros?",
+    "esperado": [
+     "pagination#simple-pagination"
+    ],
+    "posicao": 1,
+    "top3": [
+     "pagination#simple-pagination",
+     "pagination#paginating-query-builder-results",
+     "pagination#manually-creating-a-paginator"
+    ],
+    "segundos": 0.691
+   },
+   {
+    "id": 2,
+    "tipo": "metodo",
+    "pergunta": "Para que serve o método simplePaginate?",
+    "esperado": [
+     "pagination#simple-pagination"
+    ],
+    "posicao": 2,
+    "top3": [
+     "scout#pagination",
+     "pagination#simple-pagination",
+     "pagination#paginator-instance-methods"
+    ],
+    "segundos": 0.577
+   },
+   {
+    "id": 3,
+    "tipo": "conceito",
+    "pergunta": "Qual paginação é mais eficiente para tabelas muito grandes e rolagem infinita?",
+    "esperado": [
+     "pagination#cursor-pagination"
+    ],
+    "posicao": 1,
+    "top3": [
+     "pagination#cursor-pagination",
+     "pagination#simple-pagination",
+     "pagination#paginating-eloquent-results"
+    ],
+    "segundos": 0.69
+   },
+   {
+    "id": 4,
+    "tipo": "conceito",
+    "pergunta": "Como evitar o problema de N+1 consultas ao carregar relacionamentos?",
+    "esperado": [
+     "eloquent-relationships#eager-loading"
+    ],
+    "posicao": 1,
+    "top3": [
+     "eloquent-relationships#eager-loading",
+     "eloquent-relationships#polymorphic-automatically-hydrating-parent-models-on-children",
+     "eloquent-relationships#automatically-hydrating-parent-models-on-children"
+    ],
+    "segundos": 0.66
+   },
+   {
+    "id": 5,
+    "tipo": "metodo",
+    "pergunta": "Como usar Model::preventLazyLoading para detectar carregamento preguiçoso?",
+    "esperado": [
+     "eloquent-relationships#preventing-lazy-loading"
+    ],
+    "posicao": 1,
+    "top3": [
+     "eloquent-relationships#preventing-lazy-loading",
+     "eloquent#configuring-eloquent-strictness",
+     "eloquent-relationships#eager-loading"
+    ],
+    "segundos": 0.672
+   },
+   {
+    "id": 6,
+    "tipo": "conceito",
+    "pergunta": "Como carregar um relacionamento depois que o model já foi buscado do banco?",
+    "esperado": [
+     "eloquent-relationships#lazy-eager-loading"
+    ],
+    "posicao": null,
+    "top3": [
+     "eloquent-relationships#deferred-count-loading",
+     "eloquent-relationships#morph-to-deferred-count-loading",
+     "eloquent-relationships#one-to-many-polymorphic-retrieving-the-relationship"
+    ],
+    "segundos": 0.732
+   },
+   {
+    "id": 7,
+    "tipo": "conceito",
+    "pergunta": "O que fazer quando um job da fila falha várias vezes?",
+    "esperado": [
+     "queues#dealing-with-failed-jobs",
+     "queues#max-attempts"
+    ],
+    "posicao": null,
+    "top3": [
+     "queues#queue-failover",
+     "queues#testing-job-chains",
+     "queues#allowing-failures"
+    ],
+    "segundos": 0.631
+   },
+   {
+    "id": 8,
+    "tipo": "metodo",
+    "pergunta": "Como reprocessar jobs que falharam com o comando queue:retry?",
+    "esperado": [
+     "queues#retrying-failed-jobs"
+    ],
+    "posicao": 1,
+    "top3": [
+     "queues#retrying-failed-jobs",
+     "queues#retrying-failed-batch-jobs",
+     "queues#pausing-and-resuming-queue-workers"
+    ],
+    "segundos": 0.631
+   },
+   {
+    "id": 9,
+    "tipo": "conceito",
+    "pergunta": "Como limitar quantas vezes um job pode ser tentado antes de ser considerado falho?",
+    "esperado": [
+     "queues#max-attempts"
+    ],
+    "posicao": 1,
+    "top3": [
+     "queues#max-attempts",
+     "horizon#max-job-attempts",
+     "queues#cleaning-up-after-failed-jobs"
+    ],
+    "segundos": 0.718
+   },
+   {
+    "id": 10,
+    "tipo": "metodo",
+    "pergunta": "Como usar o middleware WithoutOverlapping para um job não rodar duas vezes ao mesmo tempo?",
+    "esperado": [
+     "queues#preventing-job-overlaps"
+    ],
+    "posicao": 1,
+    "top3": [
+     "queues#preventing-job-overlaps",
+     "queues#preventing-job-overlaps",
+     "queues#sharing-lock-keys"
+    ],
+    "segundos": 0.76
+   },
+   {
+    "id": 11,
+    "tipo": "conceito",
+    "pergunta": "Como garantir que uma tarefa agendada não execute de novo enquanto a anterior ainda está rodando?",
+    "esperado": [
+     "scheduling#preventing-task-overlaps"
+    ],
+    "posicao": 4,
+    "top3": [
+     "queues#job-chaining",
+     "queues#supervisor-configuration",
+     "queues#throttling-exceptions"
+    ],
+    "segundos": 0.748
+   },
+   {
+    "id": 12,
+    "tipo": "metodo",
+    "pergunta": "Para que serve o onOneServer no agendador de tarefas?",
+    "esperado": [
+     "scheduling#running-tasks-on-one-server"
+    ],
+    "posicao": 1,
+    "top3": [
+     "scheduling#running-tasks-on-one-server",
+     "scheduling#naming-unique-jobs",
+     "scheduling#schedule-groups"
+    ],
+    "segundos": 0.623
+   },
+   {
+    "id": 13,
+    "tipo": "conceito",
+    "pergunta": "Como despachar um job somente depois que a transação do banco for confirmada?",
+    "esperado": [
+     "queues#jobs-and-database-transactions"
+    ],
+    "posicao": null,
+    "top3": [
+     "queues#debounced-jobs",
+     "queues#dispatching-batches",
+     "queues#unique-jobs"
+    ],
+    "segundos": 0.696
+   },
+   {
+    "id": 14,
+    "tipo": "conceito",
+    "pergunta": "Como processar milhares de registros em partes para não estourar a memória?",
+    "esperado": [
+     "eloquent#chunking-results",
+     "queries#chunking-results"
+    ],
+    "posicao": null,
+    "top3": [
+     "events#event-discovery-in-production",
+     "deployment#optimizing-route-loading",
+     "horizon#other-worker-options"
+    ],
+    "segundos": 0.685
+   },
+   {
+    "id": 15,
+    "tipo": "metodo",
+    "pergunta": "Como inserir ou atualizar vários registros de uma vez com upsert?",
+    "esperado": [
+     "eloquent#upserts",
+     "queries#upserts"
+    ],
+    "posicao": 1,
+    "top3": [
+     "queries#upserts",
+     "eloquent#upserts",
+     "queries#insert-statements"
+    ],
+    "segundos": 0.682
+   },
+   {
+    "id": 16,
+    "tipo": "conceito",
+    "pergunta": "Como excluir um registro sem apagá-lo de verdade do banco?",
+    "esperado": [
+     "eloquent#soft-deleting"
+    ],
+    "posicao": null,
+    "top3": [
+     "pennant#purging-features",
+     "scout#removing-records",
+     "artisan#filtering-dev-processes"
+    ],
+    "segundos": 0.671
+   },
+   {
+    "id": 17,
+    "tipo": "metodo",
+    "pergunta": "Como buscar também os registros excluídos com withTrashed?",
+    "esperado": [
+     "eloquent#including-soft-deleted-models"
+    ],
+    "posicao": 4,
+    "top3": [
+     "controllers#soft-deleted-models",
+     "scout#soft-deleting",
+     "folio#soft-deleted-models"
+    ],
+    "segundos": 0.648
+   },
+   {
+    "id": 18,
+    "tipo": "conceito",
+    "pergunta": "Como executar várias consultas dentro de uma transação e desfazer tudo se der erro?",
+    "esperado": [
+     "database#database-transactions"
+    ],
+    "posicao": null,
+    "top3": [
+     "redis#transactions",
+     "cashier-paddle#refunding-transactions",
+     "database#manually-using-transactions"
+    ],
+    "segundos": 0.757
+   },
+   {
+    "id": 19,
+    "tipo": "conceito",
+    "pergunta": "Como separar conexões de leitura e escrita para usar uma réplica do banco?",
+    "esperado": [
+     "database#read-and-write-connections"
+    ],
+    "posicao": 4,
+    "top3": [
+     "starter-kits#react-customization",
+     "redis#key-prefixes",
+     "views#introduction"
+    ],
+    "segundos": 0.687
+   },
+   {
+    "id": 20,
+    "tipo": "metodo",
+    "pergunta": "Como usar Cache::lock para evitar que dois processos executem a mesma coisa ao mesmo tempo?",
+    "esperado": [
+     "cache#atomic-locks",
+     "cache#managing-locks-across-processes"
+    ],
+    "posicao": 2,
+    "top3": [
+     "cache#managing-locks",
+     "cache#managing-locks-across-processes",
+     "testing#parallel-testing-hooks"
+    ],
+    "segundos": 0.716
+   },
+   {
+    "id": 21,
+    "tipo": "conceito",
+    "pergunta": "Como guardar um valor no cache por um tempo determinado?",
+    "esperado": [
+     "cache#storing-items-in-the-cache"
+    ],
+    "posicao": 2,
+    "top3": [
+     "cache#cache-memoization",
+     "cache#storing-items-in-the-cache",
+     "cache#determining-item-existence"
+    ],
+    "segundos": 0.628
+   },
+   {
+    "id": 22,
+    "tipo": "conceito",
+    "pergunta": "Como limitar o número de requisições por minuto de um usuário na API?",
+    "esperado": [
+     "routing#defining-rate-limiters",
+     "rate-limiting#introduction"
+    ],
+    "posicao": 2,
+    "top3": [
+     "routing#segmenting-rate-limits",
+     "routing#defining-rate-limiters",
+     "routing#multiple-rate-limits"
+    ],
+    "segundos": 0.675
+   },
+   {
+    "id": 23,
+    "tipo": "conceito",
+    "pergunta": "Como o Laravel injeta automaticamente o model a partir do id na rota?",
+    "esperado": [
+     "routing#implicit-binding"
+    ],
+    "posicao": 2,
+    "top3": [
+     "routing#route-model-binding",
+     "routing#implicit-binding",
+     "controllers#restful-scoping-resource-routes"
+    ],
+    "segundos": 0.71
+   },
+   {
+    "id": 24,
+    "tipo": "metodo",
+    "pergunta": "Como validar que um e-mail ainda não existe na tabela usando a regra unique?",
+    "esperado": [
+     "validation#rule-unique"
+    ],
+    "posicao": 1,
+    "top3": [
+     "validation#rule-unique",
+     "migrations#determining-table-column-existence",
+     "validation#rule-unique"
+    ],
+    "segundos": 0.703
+   },
+   {
+    "id": 25,
+    "tipo": "conceito",
+    "pergunta": "Como mover a validação do controller para uma classe separada?",
+    "esperado": [
+     "validation#creating-form-requests"
+    ],
+    "posicao": 4,
+    "top3": [
+     "controllers#basic-controllers",
+     "validation#manually-creating-validators",
+     "controllers#introduction"
+    ],
+    "segundos": 0.669
+   },
+   {
+    "id": 26,
+    "tipo": "conceito",
+    "pergunta": "Como gerar tokens de API para um aplicativo mobile autenticar no backend?",
+    "esperado": [
+     "sanctum#issuing-api-tokens",
+     "sanctum#api-token-authentication",
+     "sanctum#issuing-mobile-api-tokens"
+    ],
+    "posicao": 1,
+    "top3": [
+     "sanctum#issuing-mobile-api-tokens",
+     "sanctum#mobile-application-authentication",
+     "sanctum#revoking-mobile-api-tokens"
+    ],
+    "segundos": 0.736
+   },
+   {
+    "id": 27,
+    "tipo": "conceito",
+    "pergunta": "Como definir quem pode editar um post usando regras de autorização?",
+    "esperado": [
+     "authorization#writing-gates",
+     "authorization#generating-policies"
+    ],
+    "posicao": null,
+    "top3": [
+     "controllers#authorization-attributes",
+     "authorization#supplying-additional-context",
+     "authorization#policy-methods"
+    ],
+    "segundos": 0.689
+   },
+   {
+    "id": 28,
+    "tipo": "metodo",
+    "pergunta": "Como fazer várias requisições HTTP em paralelo com Http::pool?",
+    "esperado": [
+     "http-client#concurrent-requests",
+     "http-client#request-pooling"
+    ],
+    "posicao": 1,
+    "top3": [
+     "http-client#request-pooling",
+     "http-client#customizing-concurrent-requests",
+     "http-client#recording-requests-and-responses"
+    ],
+    "segundos": 0.638
+   },
+   {
+    "id": 29,
+    "tipo": "metodo",
+    "pergunta": "Como configurar tentativas automáticas em uma requisição HTTP com retry?",
+    "esperado": [
+     "http-client#retries"
+    ],
+    "posicao": 1,
+    "top3": [
+     "http-client#retries",
+     "redis#retry-and-backoff-configuration",
+     "routing#dependency-injection"
+    ],
+    "segundos": 0.694
+   },
+   {
+    "id": 30,
+    "tipo": "conceito",
+    "pergunta": "Como gerar um link temporário que expira para baixar um arquivo privado?",
+    "esperado": [
+     "filesystem#temporary-urls"
+    ],
+    "posicao": null,
+    "top3": [
+     "urls#signed-urls",
+     "filesystem#customizing-temporary-urls",
+     "filesystem#temporary-upload-urls"
+    ],
+    "segundos": 0.675
+   }
+  ]
+ },
+ {
+  "estrategia": "hibrida-bge-t0.5",
+  "geral": {
+   "n": 30,
+   "recall": 0.7666666666666667,
+   "mrr": 0.5577777777777778
+  },
+  "conceito": {
+   "n": 19,
+   "recall": 0.631578947368421,
+   "mrr": 0.3675438596491228
+  },
+  "metodo": {
+   "n": 11,
+   "recall": 1.0,
+   "mrr": 0.8863636363636364
+  },
+  "latencia_mediana_s": 0.675,
+  "perguntas": [
+   {
+    "id": 1,
+    "tipo": "conceito",
+    "pergunta": "Como paginar resultados sem fazer a consulta de contagem do total de registros?",
+    "esperado": [
+     "pagination#simple-pagination"
+    ],
+    "posicao": 1,
+    "top3": [
+     "pagination#simple-pagination",
+     "pagination#paginating-query-builder-results",
+     "pagination#paginator-instance-methods"
+    ],
+    "segundos": 0.677
+   },
+   {
+    "id": 2,
+    "tipo": "metodo",
+    "pergunta": "Para que serve o método simplePaginate?",
+    "esperado": [
+     "pagination#simple-pagination"
+    ],
+    "posicao": 1,
+    "top3": [
+     "pagination#simple-pagination",
+     "scout#pagination",
+     "pagination#paginating-query-builder-results"
+    ],
+    "segundos": 0.56
+   },
+   {
+    "id": 3,
+    "tipo": "conceito",
+    "pergunta": "Qual paginação é mais eficiente para tabelas muito grandes e rolagem infinita?",
+    "esperado": [
+     "pagination#cursor-pagination"
+    ],
+    "posicao": 1,
+    "top3": [
+     "pagination#cursor-pagination",
+     "pagination#simple-pagination",
+     "pagination#paginating-eloquent-results"
+    ],
+    "segundos": 0.695
+   },
+   {
+    "id": 4,
+    "tipo": "conceito",
+    "pergunta": "Como evitar o problema de N+1 consultas ao carregar relacionamentos?",
+    "esperado": [
+     "eloquent-relationships#eager-loading"
+    ],
+    "posicao": 1,
+    "top3": [
+     "eloquent-relationships#eager-loading",
+     "eloquent-relationships#polymorphic-automatically-hydrating-parent-models-on-children",
+     "eloquent-relationships#automatically-hydrating-parent-models-on-children"
+    ],
+    "segundos": 0.656
+   },
+   {
+    "id": 5,
+    "tipo": "metodo",
+    "pergunta": "Como usar Model::preventLazyLoading para detectar carregamento preguiçoso?",
+    "esperado": [
+     "eloquent-relationships#preventing-lazy-loading"
+    ],
+    "posicao": 1,
+    "top3": [
+     "eloquent-relationships#preventing-lazy-loading",
+     "eloquent#configuring-eloquent-strictness",
+     "eloquent-relationships#eager-loading"
+    ],
+    "segundos": 0.661
+   },
+   {
+    "id": 6,
+    "tipo": "conceito",
+    "pergunta": "Como carregar um relacionamento depois que o model já foi buscado do banco?",
+    "esperado": [
+     "eloquent-relationships#lazy-eager-loading"
+    ],
+    "posicao": null,
+    "top3": [
+     "eloquent-relationships#deferred-count-loading",
+     "eloquent-relationships#morph-to-deferred-count-loading",
+     "eloquent-relationships#nested-lazy-eager-loading-morphto"
+    ],
+    "segundos": 0.697
+   },
+   {
+    "id": 7,
+    "tipo": "conceito",
+    "pergunta": "O que fazer quando um job da fila falha várias vezes?",
+    "esperado": [
+     "queues#dealing-with-failed-jobs",
+     "queues#max-attempts"
+    ],
+    "posicao": null,
+    "top3": [
+     "queues#queue-failover",
+     "queues#retrying-failed-jobs",
+     "queues#allowing-failures"
+    ],
+    "segundos": 0.605
+   },
+   {
+    "id": 8,
+    "tipo": "metodo",
+    "pergunta": "Como reprocessar jobs que falharam com o comando queue:retry?",
+    "esperado": [
+     "queues#retrying-failed-jobs"
+    ],
+    "posicao": 1,
+    "top3": [
+     "queues#retrying-failed-jobs",
+     "queues#retrying-failed-batch-jobs",
+     "queues#job-expiration"
+    ],
+    "segundos": 0.646
+   },
+   {
+    "id": 9,
+    "tipo": "conceito",
+    "pergunta": "Como limitar quantas vezes um job pode ser tentado antes de ser considerado falho?",
+    "esperado": [
+     "queues#max-attempts"
+    ],
+    "posicao": 1,
+    "top3": [
+     "queues#max-attempts",
+     "horizon#max-job-attempts",
+     "queues#cleaning-up-after-failed-jobs"
+    ],
+    "segundos": 0.748
+   },
+   {
+    "id": 10,
+    "tipo": "metodo",
+    "pergunta": "Como usar o middleware WithoutOverlapping para um job não rodar duas vezes ao mesmo tempo?",
+    "esperado": [
+     "queues#preventing-job-overlaps"
+    ],
+    "posicao": 1,
+    "top3": [
+     "queues#preventing-job-overlaps",
+     "queues#preventing-job-overlaps",
+     "queues#sharing-lock-keys"
+    ],
+    "segundos": 0.775
+   },
+   {
+    "id": 11,
+    "tipo": "conceito",
+    "pergunta": "Como garantir que uma tarefa agendada não execute de novo enquanto a anterior ainda está rodando?",
+    "esperado": [
+     "scheduling#preventing-task-overlaps"
+    ],
+    "posicao": 4,
+    "top3": [
+     "queues#job-chaining",
+     "queues#supervisor-configuration",
+     "queues#throttling-exceptions"
+    ],
+    "segundos": 0.751
+   },
+   {
+    "id": 12,
+    "tipo": "metodo",
+    "pergunta": "Para que serve o onOneServer no agendador de tarefas?",
+    "esperado": [
+     "scheduling#running-tasks-on-one-server"
+    ],
+    "posicao": 1,
+    "top3": [
+     "scheduling#running-tasks-on-one-server",
+     "scheduling#naming-unique-jobs",
+     "pulse#servers-recorder"
+    ],
+    "segundos": 0.633
+   },
+   {
+    "id": 13,
+    "tipo": "conceito",
+    "pergunta": "Como despachar um job somente depois que a transação do banco for confirmada?",
+    "esperado": [
+     "queues#jobs-and-database-transactions"
+    ],
+    "posicao": null,
+    "top3": [
+     "queues#debounced-jobs",
+     "queues#specifying-commit-dispatch-behavior-inline",
+     "queues#dispatching-batches"
+    ],
+    "segundos": 0.71
+   },
+   {
+    "id": 14,
+    "tipo": "conceito",
+    "pergunta": "Como processar milhares de registros em partes para não estourar a memória?",
+    "esperado": [
+     "eloquent#chunking-results",
+     "queries#chunking-results"
+    ],
+    "posicao": null,
+    "top3": [
+     "events#event-discovery-in-production",
+     "deployment#optimizing-route-loading",
+     "pulse#capturing-entries"
+    ],
+    "segundos": 0.684
+   },
+   {
+    "id": 15,
+    "tipo": "metodo",
+    "pergunta": "Como inserir ou atualizar vários registros de uma vez com upsert?",
+    "esperado": [
+     "eloquent#upserts",
+     "queries#upserts"
+    ],
+    "posicao": 1,
+    "top3": [
+     "queries#upserts",
+     "eloquent#upserts",
+     "queries#insert-statements"
+    ],
+    "segundos": 0.657
+   },
+   {
+    "id": 16,
+    "tipo": "conceito",
+    "pergunta": "Como excluir um registro sem apagá-lo de verdade do banco?",
+    "esperado": [
+     "eloquent#soft-deleting"
+    ],
+    "posicao": 5,
+    "top3": [
+     "pennant#purging-features",
+     "scout#removing-records",
+     "database#running-a-delete-statement"
+    ],
+    "segundos": 0.649
+   },
+   {
+    "id": 17,
+    "tipo": "metodo",
+    "pergunta": "Como buscar também os registros excluídos com withTrashed?",
+    "esperado": [
+     "eloquent#including-soft-deleted-models"
+    ],
+    "posicao": 4,
+    "top3": [
+     "controllers#soft-deleted-models",
+     "folio#soft-deleted-models",
+     "scout#soft-deleting"
+    ],
+    "segundos": 0.636
+   },
+   {
+    "id": 18,
+    "tipo": "conceito",
+    "pergunta": "Como executar várias consultas dentro de uma transação e desfazer tudo se der erro?",
+    "esperado": [
+     "database#database-transactions"
+    ],
+    "posicao": null,
+    "top3": [
+     "redis#transactions",
+     "database#manually-using-transactions",
+     "concurrency#deferring-concurrent-tasks"
+    ],
+    "segundos": 0.694
+   },
+   {
+    "id": 19,
+    "tipo": "conceito",
+    "pergunta": "Como separar conexões de leitura e escrita para usar uma réplica do banco?",
+    "esperado": [
+     "database#read-and-write-connections"
+    ],
+    "posicao": 3,
+    "top3": [
+     "redis#key-prefixes",
+     "starter-kits#react-customization",
+     "database#read-and-write-connections"
+    ],
+    "segundos": 0.707
+   },
+   {
+    "id": 20,
+    "tipo": "metodo",
+    "pergunta": "Como usar Cache::lock para evitar que dois processos executem a mesma coisa ao mesmo tempo?",
+    "esperado": [
+     "cache#atomic-locks",
+     "cache#managing-locks-across-processes"
+    ],
+    "posicao": 2,
+    "top3": [
+     "cache#managing-locks",
+     "cache#managing-locks-across-processes",
+     "testing#parallel-testing-hooks"
+    ],
+    "segundos": 0.731
+   },
+   {
+    "id": 21,
+    "tipo": "conceito",
+    "pergunta": "Como guardar um valor no cache por um tempo determinado?",
+    "esperado": [
+     "cache#storing-items-in-the-cache"
+    ],
+    "posicao": 2,
+    "top3": [
+     "cache#cache-memoization",
+     "cache#storing-items-in-the-cache",
+     "cache#storing-items-forever"
+    ],
+    "segundos": 0.615
+   },
+   {
+    "id": 22,
+    "tipo": "conceito",
+    "pergunta": "Como limitar o número de requisições por minuto de um usuário na API?",
+    "esperado": [
+     "routing#defining-rate-limiters",
+     "rate-limiting#introduction"
+    ],
+    "posicao": 2,
+    "top3": [
+     "routing#segmenting-rate-limits",
+     "routing#defining-rate-limiters",
+     "starter-kits#rate-limiting"
+    ],
+    "segundos": 0.673
+   },
+   {
+    "id": 23,
+    "tipo": "conceito",
+    "pergunta": "Como o Laravel injeta automaticamente o model a partir do id na rota?",
+    "esperado": [
+     "routing#implicit-binding"
+    ],
+    "posicao": 2,
+    "top3": [
+     "routing#route-model-binding",
+     "routing#implicit-binding",
+     "controllers#restful-scoping-resource-routes"
+    ],
+    "segundos": 0.707
+   },
+   {
+    "id": 24,
+    "tipo": "metodo",
+    "pergunta": "Como validar que um e-mail ainda não existe na tabela usando a regra unique?",
+    "esperado": [
+     "validation#rule-unique"
+    ],
+    "posicao": 1,
+    "top3": [
+     "validation#rule-unique",
+     "validation#rule-unique",
+     "migrations#determining-table-column-existence"
+    ],
+    "segundos": 0.685
+   },
+   {
+    "id": 25,
+    "tipo": "conceito",
+    "pergunta": "Como mover a validação do controller para uma classe separada?",
+    "esperado": [
+     "validation#creating-form-requests"
+    ],
+    "posicao": 5,
+    "top3": [
+     "controllers#basic-controllers",
+     "validation#manually-creating-validators",
+     "controllers#single-action-controllers"
+    ],
+    "segundos": 0.648
+   },
+   {
+    "id": 26,
+    "tipo": "conceito",
+    "pergunta": "Como gerar tokens de API para um aplicativo mobile autenticar no backend?",
+    "esperado": [
+     "sanctum#issuing-api-tokens",
+     "sanctum#api-token-authentication",
+     "sanctum#issuing-mobile-api-tokens"
+    ],
+    "posicao": 2,
+    "top3": [
+     "sanctum#mobile-application-authentication",
+     "sanctum#issuing-mobile-api-tokens",
+     "sanctum#revoking-mobile-api-tokens"
+    ],
+    "segundos": 0.738
+   },
+   {
+    "id": 27,
+    "tipo": "conceito",
+    "pergunta": "Como definir quem pode editar um post usando regras de autorização?",
+    "esperado": [
+     "authorization#writing-gates",
+     "authorization#generating-policies"
+    ],
+    "posicao": null,
+    "top3": [
+     "controllers#authorization-attributes",
+     "authorization#policy-methods",
+     "authorization#supplying-additional-context"
+    ],
+    "segundos": 0.664
+   },
+   {
+    "id": 28,
+    "tipo": "metodo",
+    "pergunta": "Como fazer várias requisições HTTP em paralelo com Http::pool?",
+    "esperado": [
+     "http-client#concurrent-requests",
+     "http-client#request-pooling"
+    ],
+    "posicao": 1,
+    "top3": [
+     "http-client#request-pooling",
+     "http-client#customizing-concurrent-requests",
+     "http-client#making-requests"
+    ],
+    "segundos": 0.644
+   },
+   {
+    "id": 29,
+    "tipo": "metodo",
+    "pergunta": "Como configurar tentativas automáticas em uma requisição HTTP com retry?",
+    "esperado": [
+     "http-client#retries"
+    ],
+    "posicao": 1,
+    "top3": [
+     "http-client#retries",
+     "redis#retry-and-backoff-configuration",
+     "routing#dependency-injection"
+    ],
+    "segundos": 0.691
+   },
+   {
+    "id": 30,
+    "tipo": "conceito",
+    "pergunta": "Como gerar um link temporário que expira para baixar um arquivo privado?",
+    "esperado": [
+     "filesystem#temporary-urls"
+    ],
+    "posicao": null,
+    "top3": [
+     "filesystem#customizing-temporary-urls",
+     "urls#signed-urls",
+     "filesystem#temporary-upload-urls"
+    ],
+    "segundos": 0.671
+   }
+  ]
+ },
+ {
+  "estrategia": "hibrida-bge-t0.3",
+  "geral": {
+   "n": 30,
+   "recall": 0.8333333333333334,
+   "mrr": 0.5977777777777777
+  },
+  "conceito": {
+   "n": 19,
+   "recall": 0.7368421052631579,
+   "mrr": 0.4307017543859649
+  },
+  "metodo": {
+   "n": 11,
+   "recall": 1.0,
+   "mrr": 0.8863636363636364
+  },
+  "latencia_mediana_s": 0.6745000000000001,
+  "perguntas": [
+   {
+    "id": 1,
+    "tipo": "conceito",
+    "pergunta": "Como paginar resultados sem fazer a consulta de contagem do total de registros?",
+    "esperado": [
+     "pagination#simple-pagination"
+    ],
+    "posicao": 1,
+    "top3": [
+     "pagination#simple-pagination",
+     "pagination#paginating-query-builder-results",
+     "pagination#paginator-instance-methods"
+    ],
+    "segundos": 0.695
+   },
+   {
+    "id": 2,
+    "tipo": "metodo",
+    "pergunta": "Para que serve o método simplePaginate?",
+    "esperado": [
+     "pagination#simple-pagination"
+    ],
+    "posicao": 1,
+    "top3": [
+     "pagination#simple-pagination",
+     "scout#pagination",
+     "pagination#paginating-query-builder-results"
+    ],
+    "segundos": 0.56
+   },
+   {
+    "id": 3,
+    "tipo": "conceito",
+    "pergunta": "Qual paginação é mais eficiente para tabelas muito grandes e rolagem infinita?",
+    "esperado": [
+     "pagination#cursor-pagination"
+    ],
+    "posicao": 1,
+    "top3": [
+     "pagination#cursor-pagination",
+     "pagination#simple-pagination",
+     "pagination#paginating-eloquent-results"
+    ],
+    "segundos": 0.7
+   },
+   {
+    "id": 4,
+    "tipo": "conceito",
+    "pergunta": "Como evitar o problema de N+1 consultas ao carregar relacionamentos?",
+    "esperado": [
+     "eloquent-relationships#eager-loading"
+    ],
+    "posicao": 1,
+    "top3": [
+     "eloquent-relationships#eager-loading",
+     "eloquent-relationships#polymorphic-automatically-hydrating-parent-models-on-children",
+     "eloquent-relationships#automatically-hydrating-parent-models-on-children"
+    ],
+    "segundos": 0.668
+   },
+   {
+    "id": 5,
+    "tipo": "metodo",
+    "pergunta": "Como usar Model::preventLazyLoading para detectar carregamento preguiçoso?",
+    "esperado": [
+     "eloquent-relationships#preventing-lazy-loading"
+    ],
+    "posicao": 1,
+    "top3": [
+     "eloquent-relationships#preventing-lazy-loading",
+     "eloquent#configuring-eloquent-strictness",
+     "eloquent-relationships#eager-loading"
+    ],
+    "segundos": 0.665
+   },
+   {
+    "id": 6,
+    "tipo": "conceito",
+    "pergunta": "Como carregar um relacionamento depois que o model já foi buscado do banco?",
+    "esperado": [
+     "eloquent-relationships#lazy-eager-loading"
+    ],
+    "posicao": null,
+    "top3": [
+     "eloquent-relationships#deferred-count-loading",
+     "eloquent-relationships#morph-to-deferred-count-loading",
+     "eloquent-relationships#nested-lazy-eager-loading-morphto"
+    ],
+    "segundos": 0.683
+   },
+   {
+    "id": 7,
+    "tipo": "conceito",
+    "pergunta": "O que fazer quando um job da fila falha várias vezes?",
+    "esperado": [
+     "queues#dealing-with-failed-jobs",
+     "queues#max-attempts"
+    ],
+    "posicao": 5,
+    "top3": [
+     "queues#retrying-failed-jobs",
+     "queues#allowing-failures",
+     "queues#queue-failover"
+    ],
+    "segundos": 0.614
+   },
+   {
+    "id": 8,
+    "tipo": "metodo",
+    "pergunta": "Como reprocessar jobs que falharam com o comando queue:retry?",
+    "esperado": [
+     "queues#retrying-failed-jobs"
+    ],
+    "posicao": 1,
+    "top3": [
+     "queues#retrying-failed-jobs",
+     "queues#retrying-failed-batch-jobs",
+     "queues#job-expiration"
+    ],
+    "segundos": 0.618
+   },
+   {
+    "id": 9,
+    "tipo": "conceito",
+    "pergunta": "Como limitar quantas vezes um job pode ser tentado antes de ser considerado falho?",
+    "esperado": [
+     "queues#max-attempts"
+    ],
+    "posicao": 1,
+    "top3": [
+     "queues#max-attempts",
+     "horizon#max-job-attempts",
+     "queues#cleaning-up-after-failed-jobs"
+    ],
+    "segundos": 0.734
+   },
+   {
+    "id": 10,
+    "tipo": "metodo",
+    "pergunta": "Como usar o middleware WithoutOverlapping para um job não rodar duas vezes ao mesmo tempo?",
+    "esperado": [
+     "queues#preventing-job-overlaps"
+    ],
+    "posicao": 1,
+    "top3": [
+     "queues#preventing-job-overlaps",
+     "queues#preventing-job-overlaps",
+     "queues#sharing-lock-keys"
+    ],
+    "segundos": 0.779
+   },
+   {
+    "id": 11,
+    "tipo": "conceito",
+    "pergunta": "Como garantir que uma tarefa agendada não execute de novo enquanto a anterior ainda está rodando?",
+    "esperado": [
+     "scheduling#preventing-task-overlaps"
+    ],
+    "posicao": 2,
+    "top3": [
+     "queues#job-chaining",
+     "scheduling#preventing-task-overlaps",
+     "queues#preventing-job-overlaps"
+    ],
+    "segundos": 0.736
+   },
+   {
+    "id": 12,
+    "tipo": "metodo",
+    "pergunta": "Para que serve o onOneServer no agendador de tarefas?",
+    "esperado": [
+     "scheduling#running-tasks-on-one-server"
+    ],
+    "posicao": 1,
+    "top3": [
+     "scheduling#running-tasks-on-one-server",
+     "scheduling#naming-unique-jobs",
+     "pulse#servers-recorder"
+    ],
+    "segundos": 0.637
+   },
+   {
+    "id": 13,
+    "tipo": "conceito",
+    "pergunta": "Como despachar um job somente depois que a transação do banco for confirmada?",
+    "esperado": [
+     "queues#jobs-and-database-transactions"
+    ],
+    "posicao": null,
+    "top3": [
+     "queues#debounced-jobs",
+     "queues#specifying-commit-dispatch-behavior-inline",
+     "queues#dispatching-batches"
+    ],
+    "segundos": 0.705
+   },
+   {
+    "id": 14,
+    "tipo": "conceito",
+    "pergunta": "Como processar milhares de registros em partes para não estourar a memória?",
+    "esperado": [
+     "eloquent#chunking-results",
+     "queries#chunking-results"
+    ],
+    "posicao": 5,
+    "top3": [
+     "events#event-discovery-in-production",
+     "deployment#optimizing-route-loading",
+     "collections#method-with-heartbeat"
+    ],
+    "segundos": 0.678
+   },
+   {
+    "id": 15,
+    "tipo": "metodo",
+    "pergunta": "Como inserir ou atualizar vários registros de uma vez com upsert?",
+    "esperado": [
+     "eloquent#upserts",
+     "queries#upserts"
+    ],
+    "posicao": 1,
+    "top3": [
+     "queries#upserts",
+     "eloquent#upserts",
+     "queries#insert-statements"
+    ],
+    "segundos": 0.634
+   },
+   {
+    "id": 16,
+    "tipo": "conceito",
+    "pergunta": "Como excluir um registro sem apagá-lo de verdade do banco?",
+    "esperado": [
+     "eloquent#soft-deleting"
+    ],
+    "posicao": 5,
+    "top3": [
+     "pennant#purging-features",
+     "scout#removing-records",
+     "database#running-a-delete-statement"
+    ],
+    "segundos": 0.639
+   },
+   {
+    "id": 17,
+    "tipo": "metodo",
+    "pergunta": "Como buscar também os registros excluídos com withTrashed?",
+    "esperado": [
+     "eloquent#including-soft-deleted-models"
+    ],
+    "posicao": 4,
+    "top3": [
+     "controllers#soft-deleted-models",
+     "folio#soft-deleted-models",
+     "scout#soft-deleting"
+    ],
+    "segundos": 0.626
+   },
+   {
+    "id": 18,
+    "tipo": "conceito",
+    "pergunta": "Como executar várias consultas dentro de uma transação e desfazer tudo se der erro?",
+    "esperado": [
+     "database#database-transactions"
+    ],
+    "posicao": null,
+    "top3": [
+     "redis#transactions",
+     "database#manually-using-transactions",
+     "concurrency#deferring-concurrent-tasks"
+    ],
+    "segundos": 0.692
+   },
+   {
+    "id": 19,
+    "tipo": "conceito",
+    "pergunta": "Como separar conexões de leitura e escrita para usar uma réplica do banco?",
+    "esperado": [
+     "database#read-and-write-connections"
+    ],
+    "posicao": 1,
+    "top3": [
+     "database#read-and-write-connections",
+     "database#using-the-write-connection-for-reads",
+     "strings#method-fluent-str-deduplicate"
+    ],
+    "segundos": 0.692
+   },
+   {
+    "id": 20,
+    "tipo": "metodo",
+    "pergunta": "Como usar Cache::lock para evitar que dois processos executem a mesma coisa ao mesmo tempo?",
+    "esperado": [
+     "cache#atomic-locks",
+     "cache#managing-locks-across-processes"
+    ],
+    "posicao": 2,
+    "top3": [
+     "cache#managing-locks",
+     "cache#managing-locks-across-processes",
+     "cache#concurrency-limiting"
+    ],
+    "segundos": 0.743
+   },
+   {
+    "id": 21,
+    "tipo": "conceito",
+    "pergunta": "Como guardar um valor no cache por um tempo determinado?",
+    "esperado": [
+     "cache#storing-items-in-the-cache"
+    ],
+    "posicao": 2,
+    "top3": [
+     "cache#cache-memoization",
+     "cache#storing-items-in-the-cache",
+     "cache#storing-items-forever"
+    ],
+    "segundos": 0.61
+   },
+   {
+    "id": 22,
+    "tipo": "conceito",
+    "pergunta": "Como limitar o número de requisições por minuto de um usuário na API?",
+    "esperado": [
+     "routing#defining-rate-limiters",
+     "rate-limiting#introduction"
+    ],
+    "posicao": 3,
+    "top3": [
+     "routing#segmenting-rate-limits",
+     "starter-kits#rate-limiting",
+     "routing#defining-rate-limiters"
+    ],
+    "segundos": 0.667
+   },
+   {
+    "id": 23,
+    "tipo": "conceito",
+    "pergunta": "Como o Laravel injeta automaticamente o model a partir do id na rota?",
+    "esperado": [
+     "routing#implicit-binding"
+    ],
+    "posicao": 2,
+    "top3": [
+     "routing#route-model-binding",
+     "routing#implicit-binding",
+     "controllers#restful-scoping-resource-routes"
+    ],
+    "segundos": 0.703
+   },
+   {
+    "id": 24,
+    "tipo": "metodo",
+    "pergunta": "Como validar que um e-mail ainda não existe na tabela usando a regra unique?",
+    "esperado": [
+     "validation#rule-unique"
+    ],
+    "posicao": 1,
+    "top3": [
+     "validation#rule-unique",
+     "validation#rule-unique",
+     "migrations#determining-table-column-existence"
+    ],
+    "segundos": 0.683
+   },
+   {
+    "id": 25,
+    "tipo": "conceito",
+    "pergunta": "Como mover a validação do controller para uma classe separada?",
+    "esperado": [
+     "validation#creating-form-requests"
+    ],
+    "posicao": 4,
+    "top3": [
+     "controllers#basic-controllers",
+     "validation#manually-creating-validators",
+     "controllers#single-action-controllers"
+    ],
+    "segundos": 0.653
+   },
+   {
+    "id": 26,
+    "tipo": "conceito",
+    "pergunta": "Como gerar tokens de API para um aplicativo mobile autenticar no backend?",
+    "esperado": [
+     "sanctum#issuing-api-tokens",
+     "sanctum#api-token-authentication",
+     "sanctum#issuing-mobile-api-tokens"
+    ],
+    "posicao": 2,
+    "top3": [
+     "sanctum#mobile-application-authentication",
+     "sanctum#issuing-mobile-api-tokens",
+     "sanctum#revoking-mobile-api-tokens"
+    ],
+    "segundos": 0.713
+   },
+   {
+    "id": 27,
+    "tipo": "conceito",
+    "pergunta": "Como definir quem pode editar um post usando regras de autorização?",
+    "esperado": [
+     "authorization#writing-gates",
+     "authorization#generating-policies"
+    ],
+    "posicao": null,
+    "top3": [
+     "controllers#authorization-attributes",
+     "authorization#policy-methods",
+     "authorization#supplying-additional-context"
+    ],
+    "segundos": 0.647
+   },
+   {
+    "id": 28,
+    "tipo": "metodo",
+    "pergunta": "Como fazer várias requisições HTTP em paralelo com Http::pool?",
+    "esperado": [
+     "http-client#concurrent-requests",
+     "http-client#request-pooling"
+    ],
+    "posicao": 1,
+    "top3": [
+     "http-client#request-pooling",
+     "http-client#customizing-concurrent-requests",
+     "http-client#making-requests"
+    ],
+    "segundos": 0.653
+   },
+   {
+    "id": 29,
+    "tipo": "metodo",
+    "pergunta": "Como configurar tentativas automáticas em uma requisição HTTP com retry?",
+    "esperado": [
+     "http-client#retries"
+    ],
+    "posicao": 1,
+    "top3": [
+     "http-client#retries",
+     "redis#retry-and-backoff-configuration",
+     "helpers#method-retry"
+    ],
+    "segundos": 0.688
+   },
+   {
+    "id": 30,
+    "tipo": "conceito",
+    "pergunta": "Como gerar um link temporário que expira para baixar um arquivo privado?",
+    "esperado": [
+     "filesystem#temporary-urls"
+    ],
+    "posicao": null,
+    "top3": [
+     "filesystem#customizing-temporary-urls",
+     "urls#signed-urls",
+     "filesystem#temporary-upload-urls"
+    ],
+    "segundos": 0.671
+   }
+  ]
+ },
+ {
+  "estrategia": "hibrida-bge-t0.2",
+  "geral": {
+   "n": 30,
+   "recall": 0.9,
+   "mrr": 0.6394444444444445
+  },
+  "conceito": {
+   "n": 19,
+   "recall": 0.8421052631578947,
+   "mrr": 0.4921052631578947
+  },
+  "metodo": {
+   "n": 11,
+   "recall": 1.0,
+   "mrr": 0.8939393939393939
+  },
+  "latencia_mediana_s": 0.6795,
+  "perguntas": [
+   {
+    "id": 1,
+    "tipo": "conceito",
+    "pergunta": "Como paginar resultados sem fazer a consulta de contagem do total de registros?",
+    "esperado": [
+     "pagination#simple-pagination"
+    ],
+    "posicao": 1,
+    "top3": [
+     "pagination#simple-pagination",
+     "pagination#paginating-query-builder-results",
+     "pagination#paginator-instance-methods"
+    ],
+    "segundos": 0.701
+   },
+   {
+    "id": 2,
+    "tipo": "metodo",
+    "pergunta": "Para que serve o método simplePaginate?",
+    "esperado": [
+     "pagination#simple-pagination"
+    ],
+    "posicao": 1,
+    "top3": [
+     "pagination#simple-pagination",
+     "scout#pagination",
+     "pagination#paginating-query-builder-results"
+    ],
+    "segundos": 0.578
+   },
+   {
+    "id": 3,
+    "tipo": "conceito",
+    "pergunta": "Qual paginação é mais eficiente para tabelas muito grandes e rolagem infinita?",
+    "esperado": [
+     "pagination#cursor-pagination"
+    ],
+    "posicao": 1,
+    "top3": [
+     "pagination#cursor-pagination",
+     "pagination#simple-pagination",
+     "scout#pagination"
+    ],
+    "segundos": 0.693
+   },
+   {
+    "id": 4,
+    "tipo": "conceito",
+    "pergunta": "Como evitar o problema de N+1 consultas ao carregar relacionamentos?",
+    "esperado": [
+     "eloquent-relationships#eager-loading"
+    ],
+    "posicao": 1,
+    "top3": [
+     "eloquent-relationships#eager-loading",
+     "eloquent-relationships#polymorphic-automatically-hydrating-parent-models-on-children",
+     "eloquent-relationships#automatically-hydrating-parent-models-on-children"
+    ],
+    "segundos": 0.656
+   },
+   {
+    "id": 5,
+    "tipo": "metodo",
+    "pergunta": "Como usar Model::preventLazyLoading para detectar carregamento preguiçoso?",
+    "esperado": [
+     "eloquent-relationships#preventing-lazy-loading"
+    ],
+    "posicao": 1,
+    "top3": [
+     "eloquent-relationships#preventing-lazy-loading",
+     "eloquent#configuring-eloquent-strictness",
+     "eloquent-relationships#eager-loading"
+    ],
+    "segundos": 0.663
+   },
+   {
+    "id": 6,
+    "tipo": "conceito",
+    "pergunta": "Como carregar um relacionamento depois que o model já foi buscado do banco?",
+    "esperado": [
+     "eloquent-relationships#lazy-eager-loading"
+    ],
+    "posicao": 5,
+    "top3": [
+     "eloquent-relationships#deferred-count-loading",
+     "eloquent-relationships#morph-to-deferred-count-loading",
+     "eloquent-relationships#nested-lazy-eager-loading-morphto"
+    ],
+    "segundos": 0.678
+   },
+   {
+    "id": 7,
+    "tipo": "conceito",
+    "pergunta": "O que fazer quando um job da fila falha várias vezes?",
+    "esperado": [
+     "queues#dealing-with-failed-jobs",
+     "queues#max-attempts"
+    ],
+    "posicao": 3,
+    "top3": [
+     "queues#retrying-failed-jobs",
+     "queues#allowing-failures",
+     "queues#dealing-with-failed-jobs"
+    ],
+    "segundos": 0.59
+   },
+   {
+    "id": 8,
+    "tipo": "metodo",
+    "pergunta": "Como reprocessar jobs que falharam com o comando queue:retry?",
+    "esperado": [
+     "queues#retrying-failed-jobs"
+    ],
+    "posicao": 1,
+    "top3": [
+     "queues#retrying-failed-jobs",
+     "queues#retrying-failed-batch-jobs",
+     "queues#job-expiration"
+    ],
+    "segundos": 0.607
+   },
+   {
+    "id": 9,
+    "tipo": "conceito",
+    "pergunta": "Como limitar quantas vezes um job pode ser tentado antes de ser considerado falho?",
+    "esperado": [
+     "queues#max-attempts"
+    ],
+    "posicao": 1,
+    "top3": [
+     "queues#max-attempts",
+     "horizon#max-job-attempts",
+     "queues#cleaning-up-after-failed-jobs"
+    ],
+    "segundos": 0.727
+   },
+   {
+    "id": 10,
+    "tipo": "metodo",
+    "pergunta": "Como usar o middleware WithoutOverlapping para um job não rodar duas vezes ao mesmo tempo?",
+    "esperado": [
+     "queues#preventing-job-overlaps"
+    ],
+    "posicao": 1,
+    "top3": [
+     "queues#preventing-job-overlaps",
+     "queues#preventing-job-overlaps",
+     "queues#sharing-lock-keys"
+    ],
+    "segundos": 0.783
+   },
+   {
+    "id": 11,
+    "tipo": "conceito",
+    "pergunta": "Como garantir que uma tarefa agendada não execute de novo enquanto a anterior ainda está rodando?",
+    "esperado": [
+     "scheduling#preventing-task-overlaps"
+    ],
+    "posicao": 1,
+    "top3": [
+     "scheduling#preventing-task-overlaps",
+     "queues#job-chaining",
+     "queues#preventing-job-overlaps"
+    ],
+    "segundos": 0.783
+   },
+   {
+    "id": 12,
+    "tipo": "metodo",
+    "pergunta": "Para que serve o onOneServer no agendador de tarefas?",
+    "esperado": [
+     "scheduling#running-tasks-on-one-server"
+    ],
+    "posicao": 1,
+    "top3": [
+     "scheduling#running-tasks-on-one-server",
+     "scheduling#naming-unique-jobs",
+     "pulse#servers-recorder"
+    ],
+    "segundos": 0.615
+   },
+   {
+    "id": 13,
+    "tipo": "conceito",
+    "pergunta": "Como despachar um job somente depois que a transação do banco for confirmada?",
+    "esperado": [
+     "queues#jobs-and-database-transactions"
+    ],
+    "posicao": 5,
+    "top3": [
+     "queues#debounced-jobs",
+     "queues#specifying-commit-dispatch-behavior-inline",
+     "queues#reacting-to-worker-signals"
+    ],
+    "segundos": 0.697
+   },
+   {
+    "id": 14,
+    "tipo": "conceito",
+    "pergunta": "Como processar milhares de registros em partes para não estourar a memória?",
+    "esperado": [
+     "eloquent#chunking-results",
+     "queries#chunking-results"
+    ],
+    "posicao": 3,
+    "top3": [
+     "events#event-discovery-in-production",
+     "collections#method-with-heartbeat",
+     "queries#chunking-results"
+    ],
+    "segundos": 0.685
+   },
+   {
+    "id": 15,
+    "tipo": "metodo",
+    "pergunta": "Como inserir ou atualizar vários registros de uma vez com upsert?",
+    "esperado": [
+     "eloquent#upserts",
+     "queries#upserts"
+    ],
+    "posicao": 1,
+    "top3": [
+     "queries#upserts",
+     "eloquent#upserts",
+     "scout#adding-records-via-query"
+    ],
+    "segundos": 0.647
+   },
+   {
+    "id": 16,
+    "tipo": "conceito",
+    "pergunta": "Como excluir um registro sem apagá-lo de verdade do banco?",
+    "esperado": [
+     "eloquent#soft-deleting"
+    ],
+    "posicao": 5,
+    "top3": [
+     "pennant#purging-features",
+     "scout#removing-records",
+     "database#running-a-delete-statement"
+    ],
+    "segundos": 0.636
+   },
+   {
+    "id": 17,
+    "tipo": "metodo",
+    "pergunta": "Como buscar também os registros excluídos com withTrashed?",
+    "esperado": [
+     "eloquent#including-soft-deleted-models"
+    ],
+    "posicao": 3,
+    "top3": [
+     "folio#soft-deleted-models",
+     "controllers#soft-deleted-models",
+     "eloquent#including-soft-deleted-models"
+    ],
+    "segundos": 0.628
+   },
+   {
+    "id": 18,
+    "tipo": "conceito",
+    "pergunta": "Como executar várias consultas dentro de uma transação e desfazer tudo se der erro?",
+    "esperado": [
+     "database#database-transactions"
+    ],
+    "posicao": null,
+    "top3": [
+     "redis#transactions",
+     "database#manually-using-transactions",
+     "concurrency#deferring-concurrent-tasks"
+    ],
+    "segundos": 0.708
+   },
+   {
+    "id": 19,
+    "tipo": "conceito",
+    "pergunta": "Como separar conexões de leitura e escrita para usar uma réplica do banco?",
+    "esperado": [
+     "database#read-and-write-connections"
+    ],
+    "posicao": 1,
+    "top3": [
+     "database#read-and-write-connections",
+     "database#using-the-write-connection-for-reads",
+     "strings#method-fluent-str-deduplicate"
+    ],
+    "segundos": 0.701
+   },
+   {
+    "id": 20,
+    "tipo": "metodo",
+    "pergunta": "Como usar Cache::lock para evitar que dois processos executem a mesma coisa ao mesmo tempo?",
+    "esperado": [
+     "cache#atomic-locks",
+     "cache#managing-locks-across-processes"
+    ],
+    "posicao": 2,
+    "top3": [
+     "cache#managing-locks",
+     "cache#managing-locks-across-processes",
+     "cache#concurrency-limiting"
+    ],
+    "segundos": 0.744
+   },
+   {
+    "id": 21,
+    "tipo": "conceito",
+    "pergunta": "Como guardar um valor no cache por um tempo determinado?",
+    "esperado": [
+     "cache#storing-items-in-the-cache"
+    ],
+    "posicao": 2,
+    "top3": [
+     "cache#cache-memoization",
+     "cache#storing-items-in-the-cache",
+     "cache#storing-items-forever"
+    ],
+    "segundos": 0.631
+   },
+   {
+    "id": 22,
+    "tipo": "conceito",
+    "pergunta": "Como limitar o número de requisições por minuto de um usuário na API?",
+    "esperado": [
+     "routing#defining-rate-limiters",
+     "rate-limiting#introduction"
+    ],
+    "posicao": 3,
+    "top3": [
+     "routing#segmenting-rate-limits",
+     "starter-kits#rate-limiting",
+     "routing#defining-rate-limiters"
+    ],
+    "segundos": 0.677
+   },
+   {
+    "id": 23,
+    "tipo": "conceito",
+    "pergunta": "Como o Laravel injeta automaticamente o model a partir do id na rota?",
+    "esperado": [
+     "routing#implicit-binding"
+    ],
+    "posicao": 2,
+    "top3": [
+     "routing#route-model-binding",
+     "routing#implicit-binding",
+     "controllers#restful-scoping-resource-routes"
+    ],
+    "segundos": 0.708
+   },
+   {
+    "id": 24,
+    "tipo": "metodo",
+    "pergunta": "Como validar que um e-mail ainda não existe na tabela usando a regra unique?",
+    "esperado": [
+     "validation#rule-unique"
+    ],
+    "posicao": 1,
+    "top3": [
+     "validation#rule-unique",
+     "validation#rule-unique",
+     "migrations#determining-table-column-existence"
+    ],
+    "segundos": 0.684
+   },
+   {
+    "id": 25,
+    "tipo": "conceito",
+    "pergunta": "Como mover a validação do controller para uma classe separada?",
+    "esperado": [
+     "validation#creating-form-requests"
+    ],
+    "posicao": 4,
+    "top3": [
+     "controllers#basic-controllers",
+     "validation#manually-creating-validators",
+     "controllers#single-action-controllers"
+    ],
+    "segundos": 0.641
+   },
+   {
+    "id": 26,
+    "tipo": "conceito",
+    "pergunta": "Como gerar tokens de API para um aplicativo mobile autenticar no backend?",
+    "esperado": [
+     "sanctum#issuing-api-tokens",
+     "sanctum#api-token-authentication",
+     "sanctum#issuing-mobile-api-tokens"
+    ],
+    "posicao": 2,
+    "top3": [
+     "sanctum#mobile-application-authentication",
+     "sanctum#issuing-mobile-api-tokens",
+     "sanctum#revoking-mobile-api-tokens"
+    ],
+    "segundos": 0.705
+   },
+   {
+    "id": 27,
+    "tipo": "conceito",
+    "pergunta": "Como definir quem pode editar um post usando regras de autorização?",
+    "esperado": [
+     "authorization#writing-gates",
+     "authorization#generating-policies"
+    ],
+    "posicao": null,
+    "top3": [
+     "authorization#policy-methods",
+     "controllers#authorization-attributes",
+     "authorization#supplying-additional-context"
+    ],
+    "segundos": 0.647
+   },
+   {
+    "id": 28,
+    "tipo": "metodo",
+    "pergunta": "Como fazer várias requisições HTTP em paralelo com Http::pool?",
+    "esperado": [
+     "http-client#concurrent-requests",
+     "http-client#request-pooling"
+    ],
+    "posicao": 1,
+    "top3": [
+     "http-client#request-pooling",
+     "http-client#customizing-concurrent-requests",
+     "http-client#making-requests"
+    ],
+    "segundos": 0.622
+   },
+   {
+    "id": 29,
+    "tipo": "metodo",
+    "pergunta": "Como configurar tentativas automáticas em uma requisição HTTP com retry?",
+    "esperado": [
+     "http-client#retries"
+    ],
+    "posicao": 1,
+    "top3": [
+     "http-client#retries",
+     "redis#retry-and-backoff-configuration",
+     "helpers#method-retry"
+    ],
+    "segundos": 0.681
+   },
+   {
+    "id": 30,
+    "tipo": "conceito",
+    "pergunta": "Como gerar um link temporário que expira para baixar um arquivo privado?",
+    "esperado": [
+     "filesystem#temporary-urls"
+    ],
+    "posicao": null,
+    "top3": [
+     "filesystem#customizing-temporary-urls",
+     "filesystem#temporary-upload-urls",
+     "urls#signed-urls"
+    ],
+    "segundos": 0.684
+   }
+  ]
+ },
+ {
+  "estrategia": "hibrida-bge-t0.1",
+  "geral": {
+   "n": 30,
+   "recall": 0.9,
+   "mrr": 0.6594444444444444
+  },
+  "conceito": {
+   "n": 19,
+   "recall": 0.8421052631578947,
+   "mrr": 0.5324561403508772
+  },
+  "metodo": {
+   "n": 11,
+   "recall": 1.0,
+   "mrr": 0.8787878787878788
+  },
+  "latencia_mediana_s": 0.668,
+  "perguntas": [
+   {
+    "id": 1,
+    "tipo": "conceito",
+    "pergunta": "Como paginar resultados sem fazer a consulta de contagem do total de registros?",
+    "esperado": [
+     "pagination#simple-pagination"
+    ],
+    "posicao": 1,
+    "top3": [
+     "pagination#simple-pagination",
+     "pagination#paginating-query-builder-results",
+     "pagination#paginator-instance-methods"
+    ],
+    "segundos": 0.712
+   },
+   {
+    "id": 2,
+    "tipo": "metodo",
+    "pergunta": "Para que serve o método simplePaginate?",
+    "esperado": [
+     "pagination#simple-pagination"
+    ],
+    "posicao": 1,
+    "top3": [
+     "pagination#simple-pagination",
+     "pagination#paginating-query-builder-results",
+     "scout#pagination"
+    ],
+    "segundos": 0.6
+   },
+   {
+    "id": 3,
+    "tipo": "conceito",
+    "pergunta": "Qual paginação é mais eficiente para tabelas muito grandes e rolagem infinita?",
+    "esperado": [
+     "pagination#cursor-pagination"
+    ],
+    "posicao": 1,
+    "top3": [
+     "pagination#cursor-pagination",
+     "pagination#simple-pagination",
+     "pagination#introduction"
+    ],
+    "segundos": 0.696
+   },
+   {
+    "id": 4,
+    "tipo": "conceito",
+    "pergunta": "Como evitar o problema de N+1 consultas ao carregar relacionamentos?",
+    "esperado": [
+     "eloquent-relationships#eager-loading"
+    ],
+    "posicao": 1,
+    "top3": [
+     "eloquent-relationships#eager-loading",
+     "eloquent-relationships#polymorphic-automatically-hydrating-parent-models-on-children",
+     "eloquent-relationships#automatically-hydrating-parent-models-on-children"
+    ],
+    "segundos": 0.669
+   },
+   {
+    "id": 5,
+    "tipo": "metodo",
+    "pergunta": "Como usar Model::preventLazyLoading para detectar carregamento preguiçoso?",
+    "esperado": [
+     "eloquent-relationships#preventing-lazy-loading"
+    ],
+    "posicao": 1,
+    "top3": [
+     "eloquent-relationships#preventing-lazy-loading",
+     "eloquent#configuring-eloquent-strictness",
+     "eloquent-relationships#eager-loading"
+    ],
+    "segundos": 0.676
+   },
+   {
+    "id": 6,
+    "tipo": "conceito",
+    "pergunta": "Como carregar um relacionamento depois que o model já foi buscado do banco?",
+    "esperado": [
+     "eloquent-relationships#lazy-eager-loading"
+    ],
+    "posicao": 4,
+    "top3": [
+     "eloquent-relationships#deferred-count-loading",
+     "eloquent-relationships#morph-to-deferred-count-loading",
+     "eloquent-relationships#nested-lazy-eager-loading-morphto"
+    ],
+    "segundos": 0.683
+   },
+   {
+    "id": 7,
+    "tipo": "conceito",
+    "pergunta": "O que fazer quando um job da fila falha várias vezes?",
+    "esperado": [
+     "queues#dealing-with-failed-jobs",
+     "queues#max-attempts"
+    ],
+    "posicao": 1,
+    "top3": [
+     "queues#dealing-with-failed-jobs",
+     "queues#fail-jobs-on-exceptions",
+     "queues#retrying-failed-jobs"
+    ],
+    "segundos": 0.587
+   },
+   {
+    "id": 8,
+    "tipo": "metodo",
+    "pergunta": "Como reprocessar jobs que falharam com o comando queue:retry?",
+    "esperado": [
+     "queues#retrying-failed-jobs"
+    ],
+    "posicao": 1,
+    "top3": [
+     "queues#retrying-failed-jobs",
+     "queues#retrying-failed-batch-jobs",
+     "queues#job-expiration"
+    ],
+    "segundos": 0.6
+   },
+   {
+    "id": 9,
+    "tipo": "conceito",
+    "pergunta": "Como limitar quantas vezes um job pode ser tentado antes de ser considerado falho?",
+    "esperado": [
+     "queues#max-attempts"
+    ],
+    "posicao": 1,
+    "top3": [
+     "queues#max-attempts",
+     "horizon#max-job-attempts",
+     "queues#time-based-attempts"
+    ],
+    "segundos": 0.719
+   },
+   {
+    "id": 10,
+    "tipo": "metodo",
+    "pergunta": "Como usar o middleware WithoutOverlapping para um job não rodar duas vezes ao mesmo tempo?",
+    "esperado": [
+     "queues#preventing-job-overlaps"
+    ],
+    "posicao": 1,
+    "top3": [
+     "queues#preventing-job-overlaps",
+     "queues#preventing-job-overlaps",
+     "queues#sharing-lock-keys"
+    ],
+    "segundos": 0.79
+   },
+   {
+    "id": 11,
+    "tipo": "conceito",
+    "pergunta": "Como garantir que uma tarefa agendada não execute de novo enquanto a anterior ainda está rodando?",
+    "esperado": [
+     "scheduling#preventing-task-overlaps"
+    ],
+    "posicao": 1,
+    "top3": [
+     "scheduling#preventing-task-overlaps",
+     "queues#preventing-job-overlaps",
+     "scheduling#pausing-scheduled-tasks"
+    ],
+    "segundos": 0.781
+   },
+   {
+    "id": 12,
+    "tipo": "metodo",
+    "pergunta": "Para que serve o onOneServer no agendador de tarefas?",
+    "esperado": [
+     "scheduling#running-tasks-on-one-server"
+    ],
+    "posicao": 1,
+    "top3": [
+     "scheduling#running-tasks-on-one-server",
+     "scheduling#naming-unique-jobs",
+     "pulse#servers-recorder"
+    ],
+    "segundos": 0.636
+   },
+   {
+    "id": 13,
+    "tipo": "conceito",
+    "pergunta": "Como despachar um job somente depois que a transação do banco for confirmada?",
+    "esperado": [
+     "queues#jobs-and-database-transactions"
+    ],
+    "posicao": 3,
+    "top3": [
+     "queues#specifying-commit-dispatch-behavior-inline",
+     "queues#debounced-jobs",
+     "queues#jobs-and-database-transactions"
+    ],
+    "segundos": 0.708
+   },
+   {
+    "id": 14,
+    "tipo": "conceito",
+    "pergunta": "Como processar milhares de registros em partes para não estourar a memória?",
+    "esperado": [
+     "eloquent#chunking-results",
+     "queries#chunking-results"
+    ],
+    "posicao": 3,
+    "top3": [
+     "events#event-discovery-in-production",
+     "collections#method-with-heartbeat",
+     "queries#chunking-results"
+    ],
+    "segundos": 0.687
+   },
+   {
+    "id": 15,
+    "tipo": "metodo",
+    "pergunta": "Como inserir ou atualizar vários registros de uma vez com upsert?",
+    "esperado": [
+     "eloquent#upserts",
+     "queries#upserts"
+    ],
+    "posicao": 1,
+    "top3": [
+     "queries#upserts",
+     "eloquent#upserts",
+     "queries#update-or-insert"
+    ],
+    "segundos": 0.624
+   },
+   {
+    "id": 16,
+    "tipo": "conceito",
+    "pergunta": "Como excluir um registro sem apagá-lo de verdade do banco?",
+    "esperado": [
+     "eloquent#soft-deleting"
+    ],
+    "posicao": 4,
+    "top3": [
+     "scout#removing-records",
+     "database#running-a-delete-statement",
+     "eloquent#deleting-an-existing-model-by-its-primary-key"
+    ],
+    "segundos": 0.642
+   },
+   {
+    "id": 17,
+    "tipo": "metodo",
+    "pergunta": "Como buscar também os registros excluídos com withTrashed?",
+    "esperado": [
+     "eloquent#including-soft-deleted-models"
+    ],
+    "posicao": 3,
+    "top3": [
+     "folio#soft-deleted-models",
+     "controllers#soft-deleted-models",
+     "eloquent#including-soft-deleted-models"
+    ],
+    "segundos": 0.61
+   },
+   {
+    "id": 18,
+    "tipo": "conceito",
+    "pergunta": "Como executar várias consultas dentro de uma transação e desfazer tudo se der erro?",
+    "esperado": [
+     "database#database-transactions"
+    ],
+    "posicao": null,
+    "top3": [
+     "eloquent-relationships#transactional-pivot-operations",
+     "database#manually-using-transactions",
+     "database#handling-deadlocks"
+    ],
+    "segundos": 0.667
+   },
+   {
+    "id": 19,
+    "tipo": "conceito",
+    "pergunta": "Como separar conexões de leitura e escrita para usar uma réplica do banco?",
+    "esperado": [
+     "database#read-and-write-connections"
+    ],
+    "posicao": 1,
+    "top3": [
+     "database#read-and-write-connections",
+     "database#using-the-write-connection-for-reads",
+     "strings#method-fluent-str-deduplicate"
+    ],
+    "segundos": 0.652
+   },
+   {
+    "id": 20,
+    "tipo": "metodo",
+    "pergunta": "Como usar Cache::lock para evitar que dois processos executem a mesma coisa ao mesmo tempo?",
+    "esperado": [
+     "cache#atomic-locks",
+     "cache#managing-locks-across-processes"
+    ],
+    "posicao": 3,
+    "top3": [
+     "cache#managing-locks",
+     "cache#concurrency-limiting",
+     "cache#managing-locks-across-processes"
+    ],
+    "segundos": 0.729
+   },
+   {
+    "id": 21,
+    "tipo": "conceito",
+    "pergunta": "Como guardar um valor no cache por um tempo determinado?",
+    "esperado": [
+     "cache#storing-items-in-the-cache"
+    ],
+    "posicao": 2,
+    "top3": [
+     "cache#cache-memoization",
+     "cache#storing-items-in-the-cache",
+     "cache#storing-items-forever"
+    ],
+    "segundos": 0.637
+   },
+   {
+    "id": 22,
+    "tipo": "conceito",
+    "pergunta": "Como limitar o número de requisições por minuto de um usuário na API?",
+    "esperado": [
+     "routing#defining-rate-limiters",
+     "rate-limiting#introduction"
+    ],
+    "posicao": 4,
+    "top3": [
+     "routing#segmenting-rate-limits",
+     "starter-kits#rate-limiting",
+     "rate-limiting#basic-usage"
+    ],
+    "segundos": 0.72
+   },
+   {
+    "id": 23,
+    "tipo": "conceito",
+    "pergunta": "Como o Laravel injeta automaticamente o model a partir do id na rota?",
+    "esperado": [
+     "routing#implicit-binding"
+    ],
+    "posicao": 2,
+    "top3": [
+     "routing#route-model-binding",
+     "routing#implicit-binding",
+     "controllers#restful-scoping-resource-routes"
+    ],
+    "segundos": 0.714
+   },
+   {
+    "id": 24,
+    "tipo": "metodo",
+    "pergunta": "Como validar que um e-mail ainda não existe na tabela usando a regra unique?",
+    "esperado": [
+     "validation#rule-unique"
+    ],
+    "posicao": 1,
+    "top3": [
+     "validation#rule-unique",
+     "validation#rule-unique",
+     "validation#"
+    ],
+    "segundos": 0.691
+   },
+   {
+    "id": 25,
+    "tipo": "conceito",
+    "pergunta": "Como mover a validação do controller para uma classe separada?",
+    "esperado": [
+     "validation#creating-form-requests"
+    ],
+    "posicao": null,
+    "top3": [
+     "controllers#basic-controllers",
+     "controllers#single-action-controllers",
+     "validation#manually-creating-validators"
+    ],
+    "segundos": 0.648
+   },
+   {
+    "id": 26,
+    "tipo": "conceito",
+    "pergunta": "Como gerar tokens de API para um aplicativo mobile autenticar no backend?",
+    "esperado": [
+     "sanctum#issuing-api-tokens",
+     "sanctum#api-token-authentication",
+     "sanctum#issuing-mobile-api-tokens"
+    ],
+    "posicao": 2,
+    "top3": [
+     "sanctum#mobile-application-authentication",
+     "sanctum#issuing-mobile-api-tokens",
+     "sanctum#issuing-api-tokens"
+    ],
+    "segundos": 0.701
+   },
+   {
+    "id": 27,
+    "tipo": "conceito",
+    "pergunta": "Como definir quem pode editar um post usando regras de autorização?",
+    "esperado": [
+     "authorization#writing-gates",
+     "authorization#generating-policies"
+    ],
+    "posicao": null,
+    "top3": [
+     "authorization#policy-methods",
+     "authorization#supplying-additional-context",
+     "controllers#authorization-attributes"
+    ],
+    "segundos": 0.637
+   },
+   {
+    "id": 28,
+    "tipo": "metodo",
+    "pergunta": "Como fazer várias requisições HTTP em paralelo com Http::pool?",
+    "esperado": [
+     "http-client#concurrent-requests",
+     "http-client#request-pooling"
+    ],
+    "posicao": 1,
+    "top3": [
+     "http-client#request-pooling",
+     "http-client#customizing-concurrent-requests",
+     "http-client#making-requests"
+    ],
+    "segundos": 0.619
+   },
+   {
+    "id": 29,
+    "tipo": "metodo",
+    "pergunta": "Como configurar tentativas automáticas em uma requisição HTTP com retry?",
+    "esperado": [
+     "http-client#retries"
+    ],
+    "posicao": 1,
+    "top3": [
+     "http-client#retries",
+     "redis#retry-and-backoff-configuration",
+     "helpers#method-retry"
+    ],
+    "segundos": 0.647
+   },
+   {
+    "id": 30,
+    "tipo": "conceito",
+    "pergunta": "Como gerar um link temporário que expira para baixar um arquivo privado?",
+    "esperado": [
+     "filesystem#temporary-urls"
+    ],
+    "posicao": 5,
+    "top3": [
+     "filesystem#customizing-temporary-urls",
+     "filesystem#temporary-upload-urls",
+     "urls#signed-urls"
+    ],
+    "segundos": 0.662
+   }
+  ]
+ }
+]

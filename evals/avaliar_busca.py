@@ -25,6 +25,10 @@ ESTRATEGIAS = {
     "trigramas": lambda c, p, k: busca.trigramas(c, p, k),
     "hibrida-nomic": lambda c, p, k: busca.hibrida(c, p, "nomic", k),
     "hibrida-bge": lambda c, p, k: busca.hibrida(c, p, "bge", k),
+    "hibrida-bge-t0.5": lambda c, p, k: busca.hibrida(c, p, "bge", k, peso_trigramas=0.5),
+    "hibrida-bge-t0.3": lambda c, p, k: busca.hibrida(c, p, "bge", k, peso_trigramas=0.3),
+    "hibrida-bge-t0.2": lambda c, p, k: busca.hibrida(c, p, "bge", k, peso_trigramas=0.2),
+    "hibrida-bge-t0.1": lambda c, p, k: busca.hibrida(c, p, "bge", k, peso_trigramas=0.1),
 }
 
 

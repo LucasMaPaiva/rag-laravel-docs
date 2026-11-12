@@ -40,12 +40,32 @@ O que os números dizem até aqui:
 
 - **O modelo multilíngue é o que mais pesa.** Com pergunta em português e documentação em inglês,
   o bge-m3 sobe o acerto nas perguntas conceituais de 21% para 84%.
-- **A busca híbrida ajuda o modelo fraco e atrapalha o forte.** Com o nomic, ela sobe o recall de
-  43% para 57%. Com o bge-m3, cai de 87% para 73%: o RRF dá o mesmo peso às duas listas, e nas
-  perguntas conceituais os trigramas trazem ruído (palavras em português contra texto em inglês).
-  Em compensação, a híbrida acerta 100% das perguntas com nome de método.
-- Próximo teste: peso menor para os trigramas no RRF, ou usar trigramas só quando a pergunta
-  cita um identificador (`simplePaginate`, `Cache::lock`).
+- **A busca híbrida com pesos iguais ajuda o modelo fraco e atrapalha o forte.** Com o nomic, ela
+  sobe o recall de 43% para 57%. Com o bge-m3, cai de 87% para 73%: nas perguntas conceituais,
+  os trigramas trazem ruído (palavras em português contra texto em inglês) e empurram a seção
+  certa para baixo. Em compensação, a híbrida acerta 100% das perguntas com nome de método.
+
+### Peso menor para os trigramas
+
+O RRF passou a aceitar um peso por lista (`peso / (60 + posição)`). Com o bge-m3, variando o
+peso dos trigramas:
+
+| Peso dos trigramas | Recall@5 geral | Conceito | Nome de método | MRR |
+|---|---|---|---|---|
+| (só vetorial) | 87% | 84% | 91% | 0,69 |
+| 1,0 | 73% | 58% | 100% | 0,55 |
+| 0,5 | 77% | 63% | 100% | 0,56 |
+| 0,3 | 83% | 74% | 100% | 0,60 |
+| **0,2** | **90%** | **84%** | **100%** | 0,64 |
+| 0,1 | 90% | 84% | 100% | 0,66 |
+
+Com peso 0,2, a híbrida mantém o acerto conceitual da vetorial e ainda acerta todas as perguntas
+com nome de método. O MRR fica um pouco abaixo da vetorial pura (0,64 contra 0,69): os trigramas
+às vezes empurram a seção certa do 1º para o 2º lugar.
+
+Cuidado com a leitura: são só 30 perguntas (cada uma vale 3,3 pontos) e o peso foi escolhido
+olhando para elas mesmas. Para confirmar, o certo é testar com perguntas novas, que não serviram
+para escolher o peso.
 
 Os resultados completos de cada rodada ficam em `evals/resultados/`.
 
