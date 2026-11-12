@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RAG Laravel Docs</title>
+<style>
+  :root {
+    --fundo: #f7f7f5; --cartao: #ffffff; --texto: #1d1d1f; --suave: #6b6b70;
+    --borda: #e2e2e0; --destaque: #e0402c; --destaque-texto: #ffffff;
+    --codigo: #f1f1ee; --ok: #1f7a4d;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --fundo: #141416; --cartao: #1e1e21; --texto: #ececee; --suave: #9a9aa2;
+      --borda: #2e2e33; --destaque: #ff5a43; --destaque-texto: #141416;
+      --codigo: #26262a; --ok: #4cc38a;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--fundo); color: var(--texto);
+    font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  main { max-width: 1280px; margin: 0 auto; padding: 32px 16px 64px; }
+  .cabeca { max-width: 760px; margin: 0 auto; text-align: center; transition: padding-top .3s ease; }
+  /* Antes da primeira busca, o campo fica no meio da tela; depois sobe para dar lugar aos resultados. */
+  body.inicial .cabeca { padding-top: calc(50vh - 190px); }
+  h1 { font-size: 26px; margin: 0 0 6px; }
+  .sub { color: var(--suave); margin: 0 0 24px; }
+  form { display: grid; gap: 12px; }
+  .linha { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; justify-content: center; }
+  input[type=search] {
+    flex: 1 1 320px; padding: 12px 14px; font: inherit; color: inherit;
+    background: var(--cartao); border: 1px solid var(--borda); border-radius: 10px;
+  }
+  select, button {
+    padding: 10px 12px; font: inherit; color: inherit; background: var(--cartao);
+    border: 1px solid var(--borda); border-radius: 10px; cursor: pointer;
+  }
+  button.principal { background: var(--destaque); color: var(--destaque-texto); border-color: transparent; font-weight: 600; }
+  label.check { display: inline-flex; gap: 6px; align-items: center; color: var(--suave); cursor: pointer; }
+  .exemplos { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; }
+  .exemplos button { font-size: 13px; padding: 4px 10px; border-radius: 999px; color: var(--suave); }
+  .colunas { display: grid; gap: 16px; margin-top: 24px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+  .colunas.uma { max-width: 760px; margin-left: auto; margin-right: auto; }
+  .coluna h2 { font-size: 14px; margin: 0 0 8px; display: flex; justify-content: space-between; gap: 8px; }
+  .coluna h2 span { color: var(--suave); font-weight: 400; }
+  ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  li { background: var(--cartao); border: 1px solid var(--borda); border-radius: 10px; padding: 10px 12px; }
+  .topo { display: flex; gap: 8px; align-items: baseline; }
+  .pos { color: var(--suave); font-variant-numeric: tabular-nums; min-width: 1.5em; }
+  .caminho { font-weight: 600; overflow-wrap: anywhere; }
+  .meta { font-size: 12px; color: var(--suave); margin: 2px 0 0 calc(1.5em + 8px); overflow-wrap: anywhere; }
+  .meta a { color: var(--destaque); }
+  details { margin: 6px 0 0 calc(1.5em + 8px); }
+  summary { font-size: 13px; color: var(--suave); cursor: pointer; }
+  pre {
+    white-space: pre-wrap; overflow-wrap: anywhere; background: var(--codigo);
+    padding: 8px 10px; border-radius: 8px; font-size: 12.5px; margin: 6px 0 0;
+  }
+  .erro { color: var(--destaque); }
+  .vazio { color: var(--suave); margin-top: 24px; text-align: center; }
+</style>
+</head>
+<body class="inicial">
+<main>
+  <div class="cabeca">
+  <h1>RAG local sobre a documentação do Laravel</h1>
+  <p class="sub">Pergunte em português; a busca roda sobre a documentação em inglês (pgvector, pg_trgm e Ollama).</p>
+
+  <form id="form">
+    <div class="linha">
+      <input type="search" id="q" placeholder="Ex.: como excluir um registro sem apagá-lo do banco?" autofocus>
+      <button class="principal" type="submit">Buscar</button>
+    </div>
+    <div class="linha">
+      <select id="estrategia"></select>
+      <select id="k">
+        <option value="3">top 3</option><option value="5" selected>top 5</option><option value="10">top 10</option>
+      </select>
+      <label class="check"><input type="checkbox" id="comparar"> comparar estratégias lado a lado</label>
+    </div>
+    <div class="exemplos" id="exemplos"></div>
+  </form>
+  </div>
+
+  <div id="saida"></div>
+</main>
+
+<script>
+const EXEMPLOS = [
+  "Como excluir um registro sem apagá-lo de verdade do banco?",
+  "Para que serve o método simplePaginate?",
+  "Como evitar o problema de N+1 consultas?",
+  "Como usar Cache::lock entre processos?",
+  "Como gerar um link temporário para baixar um arquivo privado?",
+];
+const COMPARAR = ["vetorial-nomic", "vetorial-bge", "trigramas", "hibrida-bge-t0.2"];
+const $ = (id) => document.getElementById(id);
+let rotulos = {};
+
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+async function carregarEstrategias() {
+  const lista = await (await fetch("/api/estrategias")).json();
+  for (const e of lista) {
+    rotulos[e.id] = e.rotulo;
+    $("estrategia").insertAdjacentHTML("beforeend", `<option value="${esc(e.id)}">${esc(e.rotulo)}</option>`);
+  }
+}
+
+function colunaHTML(dados) {
+  if (dados.erro) return `<section class="coluna"><h2>${esc(rotulos[dados.estrategia] || "")}</h2><p class="erro">${esc(dados.erro)}</p></section>`;
+  const itens = dados.resultados.map((r, i) => `
+    <li>
+      <div class="topo"><span class="pos">${i + 1}.</span><span class="caminho">${esc(r.caminho)}</span></div>
+      <div class="meta"><a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.secao)}</a> · ${r.pontuacao.toFixed(4)}</div>
+      <details><summary>ver trecho</summary><pre>${esc(r.trecho)}</pre></details>
+    </li>`).join("");
+  return `<section class="coluna"><h2>${esc(dados.rotulo)} <span>${dados.ms} ms</span></h2><ol>${itens}</ol></section>`;
+}
+
+async function buscarUma(q, estrategia, k) {
+  const params = new URLSearchParams({ q, estrategia, k });
+  try {
+    const resp = await fetch(`/api/buscar?${params}`);
+    const dados = await resp.json();
+    return resp.ok ? dados : { estrategia, erro: dados.erro || `erro ${resp.status}` };
+  } catch (e) {
+    return { estrategia, erro: "servidor fora do ar?" };
+  }
+}
+
+async function buscar() {
+  const q = $("q").value.trim();
+  if (!q) return;
+  const k = $("k").value;
+  document.body.classList.remove("inicial");
+  sincronizarURL();
+  const estrategias = $("comparar").checked ? COMPARAR : [$("estrategia").value];
+  $("saida").innerHTML = `<p class="vazio">Buscando…</p>`;
+  const resultados = await Promise.all(estrategias.map((e) => buscarUma(q, e, k)));
+  $("saida").innerHTML = `<div class="colunas${resultados.length === 1 ? " uma" : ""}">${resultados.map(colunaHTML).join("")}</div>`;
+}
+
+$("form").addEventListener("submit", (ev) => { ev.preventDefault(); buscar(); });
+$("comparar").addEventListener("change", () => { $("estrategia").disabled = $("comparar").checked; if ($("q").value.trim()) buscar(); });
+for (const ex of EXEMPLOS) {
+  const b = document.createElement("button");
+  b.type = "button"; b.textContent = ex;
+  b.onclick = () => { $("q").value = ex; buscar(); };
+  $("exemplos").appendChild(b);
+}
+// A busca fica na URL (?q=...&estrategia=...&k=...&comparar=1): dá para compartilhar ou recarregar.
+function sincronizarURL() {
+  const p = new URLSearchParams({ q: $("q").value.trim(), k: $("k").value });
+  if ($("comparar").checked) p.set("comparar", "1"); else p.set("estrategia", $("estrategia").value);
+  history.replaceState(null, "", `?${p}`);
+}
+
+async function iniciar() {
+  await carregarEstrategias();
+  const p = new URLSearchParams(location.search);
+  if (p.get("estrategia") && rotulos[p.get("estrategia")]) $("estrategia").value = p.get("estrategia");
+  if (p.get("k")) $("k").value = p.get("k");
+  if (p.get("comparar") === "1") { $("comparar").checked = true; $("estrategia").disabled = true; }
+  if (p.get("q")) { $("q").value = p.get("q"); buscar(); }
+}
+iniciar();
+</script>
+</body>
+</html>

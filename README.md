@@ -81,6 +81,31 @@ refeita com o mesmo gabarito:
 
 Com o gabarito antigo, o nomic tinha 40% (vetorial) e 50% (híbrida); com o novo, 43% e 57%.
 
+## Testar a busca
+
+Com o banco e o Ollama no ar (`docker compose up -d`):
+
+```bash
+uv run python -m rag_laravel.web
+```
+
+Abre uma interface em http://127.0.0.1:8470: escreva a pergunta, escolha a estratégia ou marque
+"comparar estratégias lado a lado" para ver nomic, bge-m3, trigramas e híbrida na mesma tela.
+Usa só a biblioteca padrão do Python (`http.server`), sem dependência nova.
+A busca fica na URL (`?q=...&comparar=1`), então dá para compartilhar ou recarregar.
+
+![Tela inicial da interface](docs/img/inicio.png)
+
+Uma estratégia só (híbrida com bge-m3): a pergunta cita `simplePaginate` e a seção certa vem em 1º.
+
+![Resultado da busca híbrida](docs/img/hibrida.png)
+
+Comparando lado a lado, com a pergunta "Como excluir um registro sem apagá-lo de verdade do banco?":
+o nomic, treinado em inglês, só traz seções de cobrança; o bge-m3 encontra as seções de exclusão
+e de soft delete.
+
+![Comparação das estratégias lado a lado](docs/img/comparar.png)
+
 ## Desenvolvimento
 
 ```bash
