@@ -69,6 +69,11 @@ para escolher o peso.
 
 Os resultados completos de cada rodada ficam em `evals/resultados/`.
 
+Rodada de conferência (12/11, banco e índices HNSW recriados do zero): as buscas vetoriais e por
+trigramas repetiram os números acima; a híbrida variou um pouco para cima (pesos iguais 77%, peso
+0,2 com 93% no geral e 89% no conceito), efeito do índice aproximado. A geração repetiu 100% de
+respostas com citação, 89% citando a seção certa e 15 s por resposta.
+
 ### Correção do gabarito
 
 Na primeira rodada (só nomic e trigramas), três "erros" eram seções corretas que o gabarito não
@@ -97,7 +102,7 @@ contam.
 | Citações para fonte inexistente | 0% | 0% |
 | A seção certa estava entre as 5 fontes (busca) | 90% | 90% |
 | Cita a seção certa, quando ela estava nas fontes | 74% | **89%** |
-| Tempo mediano por resposta (RTX 4050) | 24 s | 15 s |
+| Tempo mediano por resposta (RTX 3050 6 GB) | 24 s | 15 s |
 
 - **Na primeira rodada, 7 de 30 respostas vieram sem nenhuma citação**, com o conteúdo certo. A
   regra de citar estava só nas instruções de sistema, antes de 5 trechos longos. Repetir a regra

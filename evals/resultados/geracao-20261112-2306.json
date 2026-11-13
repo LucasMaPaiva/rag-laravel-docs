@@ -1,0 +1,773 @@
+[
+ {
+  "id": 1,
+  "tipo": "conceito",
+  "pergunta": "Como paginar resultados sem fazer a consulta de contagem do total de registros?",
+  "esperado": [
+   "pagination#simple-pagination"
+  ],
+  "fontes": [
+   "pagination#simple-pagination",
+   "pagination#paginating-query-builder-results",
+   "pagination#paginator-instance-methods",
+   "pagination#manually-creating-a-paginator",
+   "pagination#cursor-vs-offset-pagination"
+  ],
+  "esperada_nas_fontes": true,
+  "resposta": "Para paginar resultados sem realizar a consulta de contagem do total de registros, você pode usar o método `simplePaginate` [1]. Este método realiza uma única consulta eficiente, sem precisar contar o número total de registros antes de recuperá-los do banco de dados. Isso é útil quando você não precisa exibir o número total de páginas na interface do usuário. Por exemplo:\n\n```php\n$users = DB::table('users')->simplePaginate(15);\n```\n\nUsando `simplePaginate`, você pode limitar o número de itens exibidos por página, mas não terá acesso a informações adicionais como o número total de itens ou a página atual, que são fornecidas pelo método `paginate` [2].",
+  "citadas": [
+   "pagination#simple-pagination",
+   "pagination#paginating-query-builder-results"
+  ],
+  "invalidas": [],
+  "com_citacao": true,
+  "recusou": false,
+  "cita_esperada": true,
+  "segundos": 58.7
+ },
+ {
+  "id": 2,
+  "tipo": "metodo",
+  "pergunta": "Para que serve o método simplePaginate?",
+  "esperado": [
+   "pagination#simple-pagination"
+  ],
+  "fontes": [
+   "pagination#simple-pagination",
+   "pagination#paginating-query-builder-results",
+   "scout#pagination",
+   "pagination#paginating-eloquent-results",
+   "pagination#displaying-pagination-results"
+  ],
+  "esperada_nas_fontes": true,
+  "resposta": "O método `simplePaginate` é útil quando você não precisa exibir o total de páginas na interface do usuário [1]. Ele realiza uma única consulta eficiente, sem contar o total de registros que atendem à query, o que é mais adequado para situações onde você apenas precisa de links \"Anterior\" e \"Próxima\" [1].",
+  "citadas": [
+   "pagination#simple-pagination"
+  ],
+  "invalidas": [],
+  "com_citacao": true,
+  "recusou": false,
+  "cita_esperada": true,
+  "segundos": 11.6
+ },
+ {
+  "id": 3,
+  "tipo": "conceito",
+  "pergunta": "Qual paginação é mais eficiente para tabelas muito grandes e rolagem infinita?",
+  "esperado": [
+   "pagination#cursor-pagination"
+  ],
+  "fontes": [
+   "pagination#cursor-pagination",
+   "pagination#simple-pagination",
+   "scout#pagination",
+   "pagination#paginating-eloquent-results",
+   "pagination#introduction"
+  ],
+  "esperada_nas_fontes": true,
+  "resposta": "A cursor-based pagination é mais eficiente para tabelas muito grandes e rolagem infinita [1]. Isso ocorre porque ela não utiliza o \"offset\" para determinar os registros a serem retornados, o que pode ser problemático em tabelas muito grandes. Em vez disso, ela usa um \"cursor\" para determinar exatamente onde a próxima página de resultados deve começar, o que oferece melhor desempenho e é mais adequado para interfaces com rolagem infinita [1].",
+  "citadas": [
+   "pagination#cursor-pagination"
+  ],
+  "invalidas": [],
+  "com_citacao": true,
+  "recusou": false,
+  "cita_esperada": true,
+  "segundos": 12.8
+ },
+ {
+  "id": 4,
+  "tipo": "conceito",
+  "pergunta": "Como evitar o problema de N+1 consultas ao carregar relacionamentos?",
+  "esperado": [
+   "eloquent-relationships#eager-loading"
+  ],
+  "fontes": [
+   "eloquent-relationships#eager-loading",
+   "eloquent-relationships#polymorphic-automatically-hydrating-parent-models-on-children",
+   "eloquent-relationships#automatically-hydrating-parent-models-on-children",
+   "queues#handling-relationships",
+   "eloquent-resources#conditional-relationships"
+  ],
+  "esperada_nas_fontes": true,
+  "resposta": "Para evitar o problema de N+1 consultas ao carregar relacionamentos, você pode usar o método `with()` para carregar os relacionamentos junto com o modelo pai, reduzindo assim o número de consultas. Por exemplo, ao carregar todos os livros e seus autores de uma vez, você pode usar `Book::with('author')->get()` [1]. Além disso, se você precisar acessar o modelo pai a partir do filho, pode usar o método `chaperone()` para que o modelo pai seja carregado automaticamente no modelo filho, evitando assim o problema de N+1 [2] [3].",
+  "citadas": [
+   "eloquent-relationships#eager-loading",
+   "eloquent-relationships#polymorphic-automatically-hydrating-parent-models-on-children",
+   "eloquent-relationships#automatically-hydrating-parent-models-on-children"
+  ],
+  "invalidas": [],
+  "com_citacao": true,
+  "recusou": false,
+  "cita_esperada": true,
+  "segundos": 14.4
+ },
+ {
+  "id": 5,
+  "tipo": "metodo",
+  "pergunta": "Como usar Model::preventLazyLoading para detectar carregamento preguiçoso?",
+  "esperado": [
+   "eloquent-relationships#preventing-lazy-loading"
+  ],
+  "fontes": [
+   "eloquent-relationships#preventing-lazy-loading",
+   "eloquent#configuring-eloquent-strictness",
+   "eloquent-relationships#eager-loading",
+   "eloquent#cursors",
+   "eloquent-relationships#relationship-methods-vs-dynamic-properties"
+  ],
+  "esperada_nas_fontes": true,
+  "resposta": "Para detectar o carregamento preguiçoso, você pode usar o método `Model::preventLazyLoading` [1]. Normalmente, você deve chamar este método no método `boot` da sua classe `AppServiceProvider`. Por exemplo:\n\n```php\nuse Illuminate\\Database\\Eloquent\\Model;\n\n/**\n * Bootstrap any application services.\n */\npublic function boot(): void\n{\n    Model::preventLazyLoading(! $this->app->isProduction());\n}\n```\n\nDepois de prevenir o carregamento preguiçoso, se tentar carregar uma relação de forma preguiçosa, o Laravel lançará uma exceção `Illuminate\\Database\\LazyLoadingViolationException` [1]. Você pode personalizar o comportamento dessas violações de carregamento preguiçoso usando o método `handleLazyLoadingViolationUsing` [1].",
+  "citadas": [
+   "eloquent-relationships#preventing-lazy-loading"
+  ],
+  "invalidas": [],
+  "com_citacao": true,
+  "recusou": false,
+  "cita_esperada": true,
+  "segundos": 15.3
+ },
+ {
+  "id": 6,
+  "tipo": "conceito",
+  "pergunta": "Como carregar um relacionamento depois que o model já foi buscado do banco?",
+  "esperado": [
+   "eloquent-relationships#lazy-eager-loading"
+  ],
+  "fontes": [
+   "eloquent-relationships#deferred-count-loading",
+   "eloquent-relationships#morph-to-deferred-count-loading",
+   "eloquent-relationships#nested-lazy-eager-loading-morphto",
+   "eloquent-relationships#counting-related-models-on-morph-to-relationships",
+   "eloquent-relationships#lazy-eager-loading"
+  ],
+  "esperada_nas_fontes": true,
+  "resposta": "Para carregar um relacionamento após o model já ter sido buscado do banco, você pode usar o método `load()`. Por exemplo, se você já tem um modelo `Book` carregado e deseja carregar o relacionamento `author`, você pode fazer isso com o seguinte código:\n\n```php\n$book->load('author');\n```\n\nSe precisar adicionar restrições à consulta de carregamento, pode passar um array com as relações e closures que recebem o builder da consulta, como no exemplo abaixo:\n\n```php\n$book->load(['author' => function ($query) {\n    $query->where('name', 'LIKE', '%John%');\n}]);\n```\n\nEssa abordagem é útil quando você precisa decidir dinamicamente se carregar relações após a recuperação do modelo principal [5].",
+  "citadas": [
+   "eloquent-relationships#lazy-eager-loading"
+  ],
+  "invalidas": [],
+  "com_citacao": true,
+  "recusou": false,
+  "cita_esperada": true,
+  "segundos": 15.2
+ },
+ {
+  "id": 7,
+  "tipo": "conceito",
+  "pergunta": "O que fazer quando um job da fila falha várias vezes?",
+  "esperado": [
+   "queues#dealing-with-failed-jobs",
+   "queues#max-attempts"
+  ],
+  "fontes": [
+   "queues#retrying-failed-jobs",
+   "queues#allowing-failures",
+   "queues#dealing-with-failed-jobs",
+   "queues#queue-failover",
+   "queues#fail-jobs-on-exceptions"
+  ],
+  "esperada_nas_fontes": true,
+  "resposta": "Quando um job da fila falha várias vezes, você pode configurar o número máximo de tentativas para o job. Isso pode ser feito adicionando o atributo `Tries` à classe do job, como no exemplo abaixo:\n\n```php\n<?php\n\nnamespace App\\Jobs;\n\nuse Illuminate\\Queue\\Attributes\\Tries;\n\n#[Tries(3)]\nclass MyJob implements ShouldQueue\n{\n    // ...\n}\n```\n\nSe você deseja lidar com diferentes tipos de exceções de forma diferente, pode usar o middleware `FailOnException` para falhar permanentemente o job em determinadas exceções, como um `AuthorizationException`, enquanto permite que outros erros sejam tratados e o job seja reagendado.\n\n```php\npublic function middleware(): array\n{\n    return [\n        new FailOnException([AuthorizationException::class])\n    ];\n}\n```\n\nEssas configurações permitem que você controle como os jobs são reagendados e lidados após falhas, garantindo que certos erros sejam permanentemente encerrados, enquanto outros podem ser reagendados automaticamente. [5]",
+  "citadas": [
+   "queues#fail-jobs-on-exceptions"
+  ],
+  "invalidas": [],
+  "com_citacao": true,
+  "recusou": false,
+  "cita_esperada": false,
+  "segundos": 17.7
+ },
+ {
+  "id": 8,
+  "tipo": "metodo",
+  "pergunta": "Como reprocessar jobs que falharam com o comando queue:retry?",
+  "esperado": [
+   "queues#retrying-failed-jobs"
+  ],
+  "fontes": [
+   "queues#retrying-failed-jobs",
+   "queues#retrying-failed-batch-jobs",
+   "queues#job-expiration",
+   "queues#queue-workers-and-deployment",
+   "queues#dealing-with-failed-jobs"
+  ],
+  "esperada_nas_fontes": true,
+  "resposta": "Para reprocessar jobs que falharam, você pode usar o comando `queue:retry` seguido do ID do job. Por exemplo:\n\n```shell\nphp artisan queue:retry ce7bb17c-cdd8-41f0-a8ec-7b4fef4e5ece\n```\n\nSe você deseja reprocessar todos os jobs de uma fila específica, pode usar:\n\n```shell\nphp artisan queue:retry --queue=name\n```\n\nPara reprocessar todos os jobs que falharam, basta executar:\n\n```shell\nphp artisan queue:retry all\n``` [1]",
+  "citadas": [
+   "queues#retrying-failed-jobs"
+  ],
+  "invalidas": [],
+  "com_citacao": true,
+  "recusou": false,
+  "cita_esperada": true,
+  "segundos": 14.2
+ },
+ {
+  "id": 9,
+  "tipo": "conceito",
+  "pergunta": "Como limitar quantas vezes um job pode ser tentado antes de ser considerado falho?",
+  "esperado": [
+   "queues#max-attempts"
+  ],
+  "fontes": [
+   "queues#max-attempts",
+   "horizon#max-job-attempts",
+   "queues#cleaning-up-after-failed-jobs",
+   "queues#time-based-attempts",
+   "queues#dealing-with-failed-jobs"
+  ],
+  "esperada_nas_fontes": true,
+  "resposta": "Você pode limitar quantas vezes um job pode ser tentado antes de ser considerado falho definindo o número de tentativas no job class usando o atributo `Tries` ou no comando `queue:work` com a opção `--tries`. Por exemplo, para definir que um job pode ser tentado três vezes, você pode adicionar `$tries = 3;` na sua classe de job [1]. Alternativamente, você pode usar o comando `php artisan queue:work --tries=3` para definir o número de tentativas para todos os jobs processados pelo worker [3].",
+  "citadas": [
+   "queues#max-attempts",
+   "queues#cleaning-up-after-failed-jobs"
+  ],
+  "invalidas": [],
+  "com_citacao": true,
+  "recusou": false,
+  "cita_esperada": true,
+  "segundos": 14.3
+ },
+ {
+  "id": 10,
+  "tipo": "metodo",
+  "pergunta": "Como usar o middleware WithoutOverlapping para um job não rodar duas vezes ao mesmo tempo?",
+  "esperado": [
+   "queues#preventing-job-overlaps"
+  ],
+  "fontes": [
+   "queues#preventing-job-overlaps",
+   "queues#preventing-job-overlaps",
+   "queues#sharing-lock-keys",
+   "scheduling#preventing-task-overlaps",
+   "queues#job-middleware"
+  ],
+  "esperada_nas_fontes": true,
+  "resposta": "Para usar o middleware `WithoutOverlapping` para garantir que um job não rode duas vezes ao mesmo tempo, você pode retornar o middleware diretamente do método `middleware` da sua classe de job. Por exemplo:\n\n```php\nuse Illuminate\\Queue\\Middleware\\WithoutOverlapping;\n\n/**\n * Get the middleware the job should pass through.\n *\n * @return array<int, object>\n */\npublic function middleware(): array\n{\n    return [new WithoutOverlapping($this->user->id)];\n}\n```\n\nNeste exemplo, o job só será executado se não houver outro job do mesmo tipo em execução para o mesmo `user->id`. Se você deseja que um job seja liberado de volta à fila após um tempo, pode usar o método `releaseAfter`:\n\n```php\n/**\n * Get the middleware the job should pass through.\n *\n * @return array<int, object>\n */\npublic function middleware(): array\n{\n    return [(new WithoutOverlapping($this->order->id))->releaseAfter(60)];\n}\n```\n\nIsso fará com que o job seja liberado de volta à fila após 60 segundos, permitindo que ele seja executado novamente. [1]",
+  "citadas": [
+   "queues#preventing-job-overlaps"
+  ],
+  "invalidas": [],
+  "com_citacao": true,
+  "recusou": false,
+  "cita_esperada": true,
+  "segundos": 17.9
+ },
+ {
+  "id": 11,
+  "tipo": "conceito",
+  "pergunta": "Como garantir que uma tarefa agendada não execute de novo enquanto a anterior ainda está rodando?",
+  "esperado": [
+   "scheduling#preventing-task-overlaps"
+  ],
+  "fontes": [
+   "scheduling#preventing-task-overlaps",
+   "queues#job-chaining",
+   "queues#preventing-job-overlaps",
+   "scheduling#pausing-scheduled-tasks",
+   "scheduling#sub-minute-scheduled-tasks"
+  ],
+  "esperada_nas_fontes": true,
+  "resposta": "Para garantir que uma tarefa agendada não execute novamente enquanto a anterior ainda está em andamento, você pode usar o método `withoutOverlapping` [1]. Por exemplo, se você tiver uma tarefa agendada chamada `emails:send`, você pode adicionar o método dessa forma:\n\n```php\nuse Illuminate\\Support\\Facades\\Schedule;\n\nSchedule::command('emails:send')->withoutOverlapping();\n```\n\nIsso fará com que a tarefa seja executada a cada minuto, mas apenas se a tarefa anterior ainda não estiver em execução. Você também pode especificar um período de tempo antes que o bloqueio expire, se necessário, usando `withoutOverlapping` com um argumento adicional, como 10 minutos:\n\n```php\nSchedule::command('emails:send')->withoutOverlapping(10);\n```",
+  "citadas": [
+   "scheduling#preventing-task-overlaps"
+  ],
+  "invalidas": [],
+  "com_citacao": true,
+  "recusou": false,
+  "cita_esperada": true,
+  "segundos": 15.1
+ },
+ {
+  "id": 12,
+  "tipo": "metodo",
+  "pergunta": "Para que serve o onOneServer no agendador de tarefas?",
+  "esperado": [
+   "scheduling#running-tasks-on-one-server"
+  ],
+  "fontes": [
+   "scheduling#running-tasks-on-one-server",
+   "scheduling#naming-unique-jobs",
+   "pulse#servers-recorder",
+   "broadcasting#introduction",
+   "octane#introduction"
+  ],
+  "esperada_nas_fontes": true,
+  "resposta": "O método `onOneServer` é usado para garantir que uma tarefa agendada seja executada apenas em um servidor específico, evitando que múltiplos servidores executem a mesma tarefa ao mesmo tempo [1]. Isso é especialmente útil quando uma tarefa gera relatórios ou realiza outras operações que não devem ser duplicadas em vários servidores [1]. Para aplicar `onOneServer` a todas as tarefas agendadas, pode-se chamar o método `alwaysOnOneServer` no `boot` do `AppServiceProvider` [1].",
+  "citadas": [
+   "scheduling#running-tasks-on-one-server"
+  ],
+  "invalidas": [],
+  "com_citacao": true,
+  "recusou": false,
+  "cita_esperada": true,
+  "segundos": 13.2
+ },
+ {
+  "id": 13,
+  "tipo": "conceito",
+  "pergunta": "Como despachar um job somente depois que a transação do banco for confirmada?",
+  "esperado": [
+   "queues#jobs-and-database-transactions"
+  ],
+  "fontes": [
+   "queues#debounced-jobs",
+   "queues#specifying-commit-dispatch-behavior-inline",
+   "queues#dispatching-batches",
+   "queues#reacting-to-worker-signals",
+   "queues#jobs-and-database-transactions"
+  ],
+  "esperada_nas_fontes": true,
+  "resposta": "Para despachar um job somente depois que a transação do banco de dados for confirmada, você pode usar o método `afterCommit()` [2]. Por exemplo:\n\n```php\nuse App\\Jobs\\ProcessPodcast;\n\nProcessPodcast::dispatch($podcast)->afterCommit();\n```\n\nIsso garante que o job `ProcessPodcast` será despachado apenas após todas as transações de banco de dados abertas terem sido confirmadas.",
+  "citadas": [
+   "queues#specifying-commit-dispatch-behavior-inline"
+  ],
+  "invalidas": [],
+  "com_citacao": true,
+  "recusou": false,
+  "cita_esperada": false,
+  "segundos": 12.7
+ },
+ {
+  "id": 14,
+  "tipo": "conceito",
+  "pergunta": "Como processar milhares de registros em partes para não estourar a memória?",
+  "esperado": [
+   "eloquent#chunking-results",
+   "queries#chunking-results"
+  ],
+  "fontes": [
+   "events#event-discovery-in-production",
+   "collections#method-with-heartbeat",
+   "queries#chunking-results",
+   "processes#disabling-process-output",
+   "pulse#sampling"
+  ],
+  "esperada_nas_fontes": true,
+  "resposta": "Para processar milhares de registros em partes sem estourar a memória, você pode usar o método `chunk` fornecido pelo Query Builder [3]. Este método permite que você processe os registros em lotes menores, o que é útil quando lidando com grandes volumes de dados. Por exemplo, para processar os usuários em lotes de 100 registros, você pode usar:\n\n```php\nDB::table('users')->orderBy('id')->chunk(100, function (Collection $users) {\n    foreach ($users as $user) {\n        // Processar cada usuário\n    }\n});\n```\n\nSe precisar atualizar os registros enquanto os processa, é recomendado usar o método `chunkById` [3], que paginara os resultados com base no primário chave dos registros, evitando problemas com a consistência dos dados.\n\nAlém disso, se a saída do processo estiver sendo muito grande e não for necessária, você pode desabilitar a recuperação de saída usando o método `quietly` [4], o que pode ajudar a economizar memória.",
+  "citadas": [
+   "queries#chunking-results",
+   "processes#disabling-process-output"
+  ],
+  "invalidas": [],
+  "com_citacao": true,
+  "recusou": false,
+  "cita_esperada": true,
+  "segundos": 17.0
+ },
+ {
+  "id": 15,
+  "tipo": "metodo",
+  "pergunta": "Como inserir ou atualizar vários registros de uma vez com upsert?",
+  "esperado": [
+   "eloquent#upserts",
+   "queries#upserts"
+  ],
+  "fontes": [
+   "queries#upserts",
+   "eloquent#upserts",
+   "scout#adding-records-via-query",
+   "queries#update-or-insert",
+   "queries#insert-statements"
+  ],
+  "esperada_nas_fontes": true,
+  "resposta": "Para inserir ou atualizar vários registros de uma vez, você pode usar o método `upsert` [1] ou `upsert` no Eloquent [2]. Ambos permitem que você insira novos registros e atualize os existentes com base em uma condição única. No exemplo, o método `upsert` é usado para inserir duas novas viagens ou atualizar as existentes com base nos valores de `departure` e `destination`, atualizando apenas o campo `price` se um registro já existir. Isso pode ser feito diretamente no Query Builder ou no Eloquent, dependendo do seu contexto.",
+  "citadas": [
+   "queries#upserts",
+   "eloquent#upserts"
+  ],
+  "invalidas": [],
+  "com_citacao": true,
+  "recusou": false,
+  "cita_esperada": true,
+  "segundos": 14.1
+ },
+ {
+  "id": 16,
+  "tipo": "conceito",
+  "pergunta": "Como excluir um registro sem apagá-lo de verdade do banco?",
+  "esperado": [
+   "eloquent#soft-deleting"
+  ],
+  "fontes": [
+   "pennant#purging-features",
+   "scout#removing-records",
+   "database#running-a-delete-statement",
+   "eloquent#soft-deleting",
+   "eloquent#deleting-an-existing-model-by-its-primary-key"
+  ],
+  "esperada_nas_fontes": true,
+  "resposta": "Para excluir um registro sem realmente removê-lo do banco de dados, você pode usar o soft delete [4]. Isso envolve adicionar o trait `SoftDeletes` ao seu modelo e adicionar a coluna `deleted_at` à sua tabela. Quando você chama o método `delete` no modelo, a coluna `deleted_at` é atualizada com a data e hora atuais, mas o registro permanece no banco de dados. Para verificar se um modelo foi soft deletado, você pode usar o método `trashed` [4].\n\nSe você souber o identificador primário do modelo, pode usar o método `destroy` para excluir o modelo sem precisar buscá-lo explicitamente [5]. Este método também pode receber múltiplos identificadores primários ou uma coleção deles. Para excluir permanentemente um modelo que usa soft delete, você pode usar o método `forceDestroy` [4].",
+  "citadas": [
+   "eloquent#soft-deleting",
+   "eloquent#deleting-an-existing-model-by-its-primary-key"
+  ],
+  "invalidas": [],
+  "com_citacao": true,
+  "recusou": false,
+  "cita_esperada": true,
+  "segundos": 16.1
+ },
+ {
+  "id": 17,
+  "tipo": "metodo",
+  "pergunta": "Como buscar também os registros excluídos com withTrashed?",
+  "esperado": [
+   "eloquent#including-soft-deleted-models"
+  ],
+  "fontes": [
+   "folio#soft-deleted-models",
+   "controllers#soft-deleted-models",
+   "eloquent#including-soft-deleted-models",
+   "scout#soft-deleting",
+   "routing#implicit-soft-deleted-models"
+  ],
+  "esperada_nas_fontes": true,
+  "resposta": "Para buscar registros excluídos (soft deleted) com `withTrashed`, você pode chamar o método `withTrashed` em várias partes do Laravel, dependendo do contexto. No caso de recursos de controle, você pode incluir `withTrashed` na definição do roteamento do recurso, como mostrado no exemplo:\n\n```php\nuse App\\Http\\Controllers\\PhotoController;\n\nRoute::resource('photos', PhotoController::class)->withTrashed();\n```\n\nIsso permitirá que os modelos excluídos sejam recuperados para as rotas `show`, `edit`, e `update`. Se você quiser permitir apenas para a rota `show`, pode especificar um array:\n\n```php\nRoute::resource('photos', PhotoController::class)->withTrashed(['show']);\n```\n\nPara consultas Eloquent, você pode chamar `withTrashed` diretamente no método `get` ou em relações, como no exemplo:\n\n```php\n$flights = Flight::withTrashed()\n    ->where('account_id', 1)\n    ->get();\n```\n\nIsso permitirá que você inclua registros excluídos em suas consultas. [3]",
+  "citadas": [
+   "eloquent#including-soft-deleted-models"
+  ],
+  "invalidas": [],
+  "com_citacao": true,
+  "recusou": false,
+  "cita_esperada": true,
+  "segundos": 16.9
+ },
+ {
+  "id": 18,
+  "tipo": "conceito",
+  "pergunta": "Como executar várias consultas dentro de uma transação e desfazer tudo se der erro?",
+  "esperado": [
+   "database#database-transactions"
+  ],
+  "fontes": [
+   "redis#transactions",
+   "concurrency#deferring-concurrent-tasks",
+   "database#manually-using-transactions",
+   "eloquent-relationships#transactional-pivot-operations",
+   "database#handling-deadlocks"
+  ],
+  "esperada_nas_fontes": false,
+  "resposta": "Para executar várias consultas dentro de uma transação e desfazer tudo se der erro, você pode usar o método `DB::transaction` [3]. Este método permite que você defina uma função que contém todas as suas operações de banco de dados. Se ocorrer um erro durante a execução desta função, todas as alterações serão automaticamente desfeitas. Aqui está um exemplo básico:\n\n```php\nuse Illuminate\\Support\\Facades\\DB;\n\nDB::transaction(function () {\n    DB::table('users')->update(['status' => 1]);\n    DB::table('settings')->update(['value' => 0]);\n});\n```\n\nSe precisar controlar o número de tentativas em caso de deadlocks, pode passar um segundo argumento ao método `transaction` [5], como no exemplo abaixo:\n\n```php\nDB::transaction(function () {\n    DB::table('users')->update(['status' => 1]);\n    DB::table('settings')->update(['value' => 0]);\n}, attempts: 5);\n```",
+  "citadas": [
+   "database#manually-using-transactions",
+   "database#handling-deadlocks"
+  ],
+  "invalidas": [],
+  "com_citacao": true,
+  "recusou": false,
+  "cita_esperada": false,
+  "segundos": 15.7
+ },
+ {
+  "id": 19,
+  "tipo": "conceito",
+  "pergunta": "Como separar conexões de leitura e escrita para usar uma réplica do banco?",
+  "esperado": [
+   "database#read-and-write-connections"
+  ],
+  "fontes": [
+   "database#read-and-write-connections",
+   "database#using-the-write-connection-for-reads",
+   "strings#method-fluent-str-deduplicate",
+   "collections#method-intersectusing",
+   "strings#method-deduplicate"
+  ],
+  "esperada_nas_fontes": true,
+  "resposta": "Para separar conexões de leitura e escrita, você pode configurar o arquivo de configuração do banco de dados do Laravel, especificando as chaves `read` e `write` para definir hosts diferentes para operações de leitura e escrita [1]. Isso permite que você utilize uma réplica do banco de dados para consultas SELECT, enquanto as operações de inserção, atualização e exclusão sejam realizadas no servidor principal. Por exemplo:\n\n```php\n'mysql' => [\n    'read' => [\n        'host' => [\n            '192.168.1.1',\n            '196.168.1.2',\n        ],\n    ],\n    'write' => [\n        'host' => [\n            '192.168.1.3',\n        ],\n    ],\n    // outros parâmetros...\n]\n```\n\nAqui, `192.168.1.1` e `196.168.1.2` serão usados para leitura, enquanto `192.168.1.3` será usado para escrita [1].",
+  "citadas": [
+   "database#read-and-write-connections"
+  ],
+  "invalidas": [],
+  "com_citacao": true,
+  "recusou": false,
+  "cita_esperada": true,
+  "segundos": 17.5
+ },
+ {
+  "id": 20,
+  "tipo": "metodo",
+  "pergunta": "Como usar Cache::lock para evitar que dois processos executem a mesma coisa ao mesmo tempo?",
+  "esperado": [
+   "cache#atomic-locks",
+   "cache#managing-locks-across-processes"
+  ],
+  "fontes": [
+   "cache#managing-locks",
+   "cache#managing-locks-across-processes",
+   "cache#concurrency-limiting",
+   "session#session-blocking",
+   "queues#unique-job-locks"
+  ],
+  "esperada_nas_fontes": true,
+  "resposta": "Para evitar que dois processos executem a mesma tarefa ao mesmo tempo, você pode usar o método `Cache::lock` [1]. Este método permite que você adquira um bloqueio em um valor de cache, garantindo que apenas um processo possa executar a tarefa ao mesmo tempo. Por exemplo, você pode adquirir um bloqueio para uma tarefa específica e liberá-lo após a conclusão:\n\n```php\nuse Illuminate\\Support\\Facades\\Cache;\n\n$lock = Cache::lock('foo', 10);\n\nif ($lock->get()) {\n    // Lock acquired for 10 seconds...\n\n    // Realize a tarefa aqui...\n\n    $lock->release();\n}\n```\n\nSe você preferir simplificar o código, pode passar uma função ao método `lock`, que será executada e o bloqueio será liberado automaticamente após a execução:\n\n```php\nCache::lock('foo', 10)->get(function () {\n    // Lock acquired for 10 seconds and automatically released...\n});\n```",
+  "citadas": [
+   "cache#managing-locks"
+  ],
+  "invalidas": [],
+  "com_citacao": true,
+  "recusou": false,
+  "cita_esperada": false,
+  "segundos": 17.2
+ },
+ {
+  "id": 21,
+  "tipo": "conceito",
+  "pergunta": "Como guardar um valor no cache por um tempo determinado?",
+  "esperado": [
+   "cache#storing-items-in-the-cache"
+  ],
+  "fontes": [
+   "cache#cache-memoization",
+   "cache#storing-items-in-the-cache",
+   "cache#storing-items-forever",
+   "cache#extending-item-lifetime",
+   "cache#introduction"
+  ],
+  "esperada_nas_fontes": true,
+  "resposta": "Você pode usar o método `put` para armazenar um valor no cache por um tempo determinado [2]. Por exemplo:\n\n```php\nCache::put('key', 'value', 60); // Armazena o valor por 60 segundos\n```\n\nSe não for passado o tempo de armazenamento, o item será armazenado indefinidamente [2].\n\n```php\nCache::put('key', 'value'); // Armazena o valor indefinidamente\n```\n\nVocê também pode especificar uma data de expiração exata usando um objeto `DateTime` ou `DateInterval` [4].\n\n```php\nCache::put('key', 'value', now()->addMinutes(10));\n```",
+  "citadas": [
+   "cache#storing-items-in-the-cache",
+   "cache#extending-item-lifetime"
+  ],
+  "invalidas": [],
+  "com_citacao": true,
+  "recusou": false,
+  "cita_esperada": true,
+  "segundos": 13.8
+ },
+ {
+  "id": 22,
+  "tipo": "conceito",
+  "pergunta": "Como limitar o número de requisições por minuto de um usuário na API?",
+  "esperado": [
+   "routing#defining-rate-limiters",
+   "rate-limiting#introduction"
+  ],
+  "fontes": [
+   "routing#segmenting-rate-limits",
+   "starter-kits#rate-limiting",
+   "routing#defining-rate-limiters",
+   "routing#defining-rate-limiters",
+   "rate-limiting#introduction"
+  ],
+  "esperada_nas_fontes": true,
+  "resposta": "Para limitar o número de requisições por minuto de um usuário na API, você pode definir um rate limiter no arquivo `App\\Providers\\AppServiceProvider` usando o método `boot` [4]. Por exemplo:\n\n```php\npublic function boot(): void\n{\n    RateLimiter::for('api', function (Request $request) {\n        return Limit::perMinute(100)->by($request->user()->id);\n    });\n}\n```\n\nNeste exemplo, o rate limiter é definido para permitir 100 requisições por minuto por ID de usuário autenticado [4]. Para usuários não autenticados, você pode definir um limite diferente usando a mesma abordagem [4].",
+  "citadas": [
+   "routing#defining-rate-limiters"
+  ],
+  "invalidas": [],
+  "com_citacao": true,
+  "recusou": false,
+  "cita_esperada": true,
+  "segundos": 14.1
+ },
+ {
+  "id": 23,
+  "tipo": "conceito",
+  "pergunta": "Como o Laravel injeta automaticamente o model a partir do id na rota?",
+  "esperado": [
+   "routing#implicit-binding"
+  ],
+  "fontes": [
+   "routing#route-model-binding",
+   "routing#implicit-binding",
+   "controllers#restful-scoping-resource-routes",
+   "folio#route-model-binding",
+   "routing#implicit-model-binding-scoping"
+  ],
+  "esperada_nas_fontes": true,
+  "resposta": "O Laravel injeta automaticamente o modelo a partir do ID na rota através do bind de modelo implícito. Quando você define uma rota que type-hint a classe Eloquent do modelo, o Laravel identifica a correspondência entre o nome da variável e o segmento da rota. Por exemplo, se a variável `$user` estiver type-hintada como `App\\Models\\User` e o segmento da rota for `{user}`, o Laravel buscará automaticamente o usuário correspondente no banco de dados [2]. Se o modelo não for encontrado, o Laravel gerará uma resposta HTTP 404 [2].",
+  "citadas": [
+   "routing#implicit-binding"
+  ],
+  "invalidas": [],
+  "com_citacao": true,
+  "recusou": false,
+  "cita_esperada": true,
+  "segundos": 13.7
+ },
+ {
+  "id": 24,
+  "tipo": "metodo",
+  "pergunta": "Como validar que um e-mail ainda não existe na tabela usando a regra unique?",
+  "esperado": [
+   "validation#rule-unique"
+  ],
+  "fontes": [
+   "validation#rule-unique",
+   "validation#rule-unique",
+   "migrations#determining-table-column-existence",
+   "validation#",
+   "validation#implicit-rules"
+  ],
+  "esperada_nas_fontes": true,
+  "resposta": "Para validar que um e-mail ainda não existe na tabela, você pode usar a regra `unique` [1]. Por exemplo:\n\n```php\n'email' => ['unique:users,email_address']\n```\n\nIsso verifica se o e-mail não existe na tabela `users` na coluna `email_address`. Se você quiser ignorar um determinado ID durante a validação, pode usar o método `ignore` [1] da seguinte forma:\n\n```php\n'email' => ['unique:users,email_address', Rule::ignore($user->id)]\n```\n\nIsso verifica a unicidade do e-mail, ignorando o registro com o ID do usuário atual.",
+  "citadas": [
+   "validation#rule-unique"
+  ],
+  "invalidas": [],
+  "com_citacao": true,
+  "recusou": false,
+  "cita_esperada": true,
+  "segundos": 13.8
+ },
+ {
+  "id": 25,
+  "tipo": "conceito",
+  "pergunta": "Como mover a validação do controller para uma classe separada?",
+  "esperado": [
+   "validation#creating-form-requests"
+  ],
+  "fontes": [
+   "controllers#basic-controllers",
+   "validation#manually-creating-validators",
+   "controllers#single-action-controllers",
+   "validation#creating-form-requests",
+   "controllers#introduction"
+  ],
+  "esperada_nas_fontes": true,
+  "resposta": "Para mover a validação do controller para uma classe separada, você pode criar uma classe de solicitação de formulário (form request) [4]. Essa classe encapsula a lógica de validação e autorização, permitindo que você se concentre apenas na lógica de negócios no controller. Por exemplo, você pode criar uma classe `StorePostRequest` para a validação de um novo post [4]. Isso ajuda a manter o código limpo e organizado, separando a lógica de validação do processamento do request. Além disso, você pode type-hintar essa classe no método do controller, e a validação será realizada automaticamente antes da execução do método do controller [4].",
+  "citadas": [
+   "validation#creating-form-requests"
+  ],
+  "invalidas": [],
+  "com_citacao": true,
+  "recusou": false,
+  "cita_esperada": true,
+  "segundos": 14.5
+ },
+ {
+  "id": 26,
+  "tipo": "conceito",
+  "pergunta": "Como gerar tokens de API para um aplicativo mobile autenticar no backend?",
+  "esperado": [
+   "sanctum#issuing-api-tokens",
+   "sanctum#api-token-authentication",
+   "sanctum#issuing-mobile-api-tokens"
+  ],
+  "fontes": [
+   "sanctum#mobile-application-authentication",
+   "sanctum#issuing-mobile-api-tokens",
+   "sanctum#revoking-mobile-api-tokens",
+   "sanctum#issuing-api-tokens",
+   "sanctum#introduction"
+  ],
+  "esperada_nas_fontes": true,
+  "resposta": "Para gerar tokens de API para um aplicativo mobile, você precisa criar uma rota que aceite as credenciais do usuário, como email, senha e nome do dispositivo, e em seguida, troque essas credenciais por um novo token Sanctum. O exemplo de código abaixo ilustra como isso pode ser feito [2]:\n\n```php\nuse App\\Models\\User;\nuse Illuminate\\Http\\Request;\nuse Illuminate\\Support\\Facades\\Hash;\nuse Illuminate\\Validation\\ValidationException;\n\nRoute::post('/sanctum/token', function (Request $request) {\n    $request->validate([\n        'email' => 'required|email',\n        'password' => 'required',\n        'device_name' => 'required',\n    ]);\n\n    $user = User::where('email', $request->email)->first();\n\n    if (! $user || ! Hash::check($request->password, $user->password)) {\n        throw ValidationException::withMessages([\n            'email' => ['The provided credentials are incorrect.'],\n        ]);\n    }\n\n    return $user->createToken($request->device_name)->plainTextToken;\n});\n```\n\nEste token pode então ser armazenado no dispositivo móvel e usado para fazer solicitações API adicionais. Quando o aplicativo móvel faz uma solicitação API, deve passar o token no cabeçalho `Authorization` como um token `Bearer` [2].",
+  "citadas": [
+   "sanctum#issuing-mobile-api-tokens"
+  ],
+  "invalidas": [],
+  "com_citacao": true,
+  "recusou": false,
+  "cita_esperada": true,
+  "segundos": 18.6
+ },
+ {
+  "id": 27,
+  "tipo": "conceito",
+  "pergunta": "Como definir quem pode editar um post usando regras de autorização?",
+  "esperado": [
+   "authorization#writing-gates",
+   "authorization#generating-policies"
+  ],
+  "fontes": [
+   "authorization#policy-methods",
+   "controllers#authorization-attributes",
+   "authorization#supplying-additional-context",
+   "authorization#via-blade-templates",
+   "authorization#writing-gates"
+  ],
+  "esperada_nas_fontes": true,
+  "resposta": "Para definir quem pode editar um post, você pode criar uma regra de autorização usando políticas [1] ou portas [5]. Com políticas, você define um método `update` na classe `PostPolicy` que verifica se o usuário atual tem permissão para editar o post com base no `id` do usuário e no `user_id` do post. Em seguida, você pode usar o `Gate::authorize('update', [$post])` em um controlador para verificar se o usuário atual tem permissão para editar o post [3]. Alternativamente, você pode definir uma porta no método `boot` do `AppServiceProvider` que verifica as mesmas condições [5].",
+  "citadas": [
+   "authorization#policy-methods",
+   "authorization#writing-gates",
+   "authorization#supplying-additional-context"
+  ],
+  "invalidas": [],
+  "com_citacao": true,
+  "recusou": false,
+  "cita_esperada": true,
+  "segundos": 14.7
+ },
+ {
+  "id": 28,
+  "tipo": "metodo",
+  "pergunta": "Como fazer várias requisições HTTP em paralelo com Http::pool?",
+  "esperado": [
+   "http-client#concurrent-requests",
+   "http-client#request-pooling"
+  ],
+  "fontes": [
+   "http-client#request-pooling",
+   "http-client#customizing-concurrent-requests",
+   "http-client#making-requests",
+   "testing#running-tests-in-parallel",
+   "http-client#request-batching"
+  ],
+  "esperada_nas_fontes": true,
+  "resposta": "Para fazer várias requisições HTTP em paralelo com o `Http::pool`, você pode usar um closure que retorna múltiplas solicitações HTTP. Cada solicitação é adicionada à pool e pode ser acessada posteriormente. Por exemplo:\n\n```php\nuse Illuminate\\Http\\Client\\Pool;\nuse Illuminate\\Support\\Facades\\Http;\n\n$responses = Http::pool(fn (Pool $pool) => [\n    $pool->get('http://localhost/first'),\n    $pool->get('http://localhost/second'),\n    $pool->get('http://localhost/third'),\n]);\n\nreturn $responses[0]->ok() &&\n       $responses[1]->ok() &&\n       $responses[2]->ok();\n```\n\nVocê também pode nomear as solicitações usando o método `as`, o que facilita o acesso às respostas correspondentes:\n\n```php\nuse Illuminate\\Http\\Client\\Pool;\nuse Illuminate\\Support\\Facades\\Http;\n\n$responses = Http::pool(fn (Pool $pool) => [\n    $pool->as('first')->get('http://localhost/first'),\n    $pool->as('second')->get('http://localhost/second'),\n    $pool->as('third')->get('http://localhost/third'),\n]);\n\nreturn $responses['first']->ok();\n```\n\nVocê pode controlar a concorrência máxima das solicitações na pool passando o argumento `concurrency` ao método `pool`. [1]",
+  "citadas": [
+   "http-client#request-pooling"
+  ],
+  "invalidas": [],
+  "com_citacao": true,
+  "recusou": false,
+  "cita_esperada": true,
+  "segundos": 20.0
+ },
+ {
+  "id": 29,
+  "tipo": "metodo",
+  "pergunta": "Como configurar tentativas automáticas em uma requisição HTTP com retry?",
+  "esperado": [
+   "http-client#retries"
+  ],
+  "fontes": [
+   "http-client#retries",
+   "redis#retry-and-backoff-configuration",
+   "helpers#method-retry",
+   "queues#retrying-failed-batch-jobs",
+   "events#specifying-queued-listener-maximum-attempts"
+  ],
+  "esperada_nas_fontes": true,
+  "resposta": "Para configurar tentativas automáticas em uma requisição HTTP com retry, você pode usar o método `retry()` do cliente HTTP do Laravel. Este método permite especificar o número máximo de tentativas e o intervalo de tempo entre elas. Por exemplo:\n\n```php\n$response = Http::retry(3, 100)->post('https://example.com/api/data');\n```\n\nAqui, a requisição será tentada três vezes, com um intervalo de 100 milissegundos entre cada tentativa. Você também pode passar uma função para calcular o intervalo dinamicamente, ou um array para definir intervalos específicos para cada tentativa [1].",
+  "citadas": [
+   "http-client#retries"
+  ],
+  "invalidas": [],
+  "com_citacao": true,
+  "recusou": false,
+  "cita_esperada": true,
+  "segundos": 15.0
+ },
+ {
+  "id": 30,
+  "tipo": "conceito",
+  "pergunta": "Como gerar um link temporário que expira para baixar um arquivo privado?",
+  "esperado": [
+   "filesystem#temporary-urls"
+  ],
+  "fontes": [
+   "filesystem#customizing-temporary-urls",
+   "filesystem#temporary-upload-urls",
+   "urls#signed-urls",
+   "filesystem#s3-request-parameters",
+   "urls#responding-to-invalid-signed-routes"
+  ],
+  "esperada_nas_fontes": false,
+  "resposta": "Para gerar um link temporário que expira para baixar um arquivo privado, você pode usar o método `temporaryUploadUrl` [2]. No entanto, para baixar um arquivo, você deve usar o método `temporaryUrl` com a opção `temporarySignedRoute` [3]. Aqui está um exemplo de como fazer isso:\n\n```php\nuse Illuminate\\Support\\Facades\\URL;\nuse Illuminate\\Support\\Facades\\Storage;\n\n$url = URL::temporarySignedRoute(\n    'files.download',\n    now()->addMinutes(5),\n    ['path' => 'private-file.jpg']\n);\n```\n\nEste código cria um link que expira após 5 minutos e permite que o usuário baixe o arquivo `private-file.jpg` armazenado no disco local. Certifique-se de que o arquivo está realmente armazenado no disco local antes de gerar o link. [3]",
+  "citadas": [
+   "filesystem#temporary-upload-urls",
+   "urls#signed-urls"
+  ],
+  "invalidas": [],
+  "com_citacao": true,
+  "recusou": false,
+  "cita_esperada": false,
+  "segundos": 15.4
+ }
+]
